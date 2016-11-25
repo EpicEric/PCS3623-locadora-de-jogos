@@ -1,0 +1,43 @@
+.login-box {
+    margin: 3em auto;
+    max-width: 410px;
+}
+
+.warning {
+    color: red;
+}
+
+/* Menu */
+
+.custom-menu-wrapper {
+    background-color: #808080;
+    margin-bottom: 2.5em;
+    white-space: nowrap;
+    position: relative;
+}
+
+.custom-menu {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+
+.custom-menu .pure-menu-link,
+.custom-menu .pure-menu-heading {
+    color: white;
+}
+
+.custom-menu .pure-menu-children .pure-menu-link,
+.custom-menu .pure-menu-children .pure-menu-heading {
+    background-color: #A0A0A0;
+}
+
+.custom-menu .pure-menu-link:hover,
+.custom-menu .pure-menu-heading:hover {
+    background-color: #C0C0C0;
+    color: black;
+}
+
+.custom-menu:last-of-type {
+    float: right;
+}

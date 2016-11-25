@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <title>Acessar sistema - Locadora de Jogos</title>
+        <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+        <div class="login-box">
+            <form class="pure-form pure-form-aligned">
+                <fieldset>
+                    <legend>Acessar sistema</legend>
+                    
+                    {% if invalid_login %}
+                    <div class="pure-control-group warning">Login inválido. Por favor, tente novamente.</div>
+                    {% endif %}
+                    
+                    <div class="pure-control-group">
+                        <label for="name">Usuário</label>
+                        <input id="name" type="text" placeholder="Username">
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label for="password">Senha</label>
+                        <input id="password" type="password" placeholder="Password">
+                    </div>
+                    
+                    <label for="forgot" class="pure-link">
+                        <a href="#">Esqueci a senha</a>
+                    </label>
+                    
+                    <div class="pure-controls">
+                        <button type="submit" class="pure-button pure-button-primary">Iniciar sessão</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

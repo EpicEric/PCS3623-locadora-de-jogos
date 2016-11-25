@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <title>Locadora de Jogos</title>
+        <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+        
+        <div class="custom-menu-wrapper">
+            <div class="pure-menu custom-menu pure-menu-horizontal">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Menu principal</a></li>
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                        <a href="#" id="menuLink1" class="pure-menu-link">Cliente</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Cadastrar novo cliente</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar cliente</a></li>
+                        </ul>
+                    </li>
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                        <a href="#" id="menuLink1" class="pure-menu-link">Jogos</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Alugar jogo</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Vender jogo</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar jogo</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Cadastrar novo exemplar</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Cadastrar novo jogo</a></li>
+                        </ul>
+                    </li>
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                        <a href="#" id="menuLink1" class="pure-menu-link">Salas</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Reservar sala</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar sala</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Cadastrar nova sala</a></li>
+                        </ul>
+                    </li>
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                        <a href="#" id="menuLink1" class="pure-menu-link">Funcionários</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar funcionário</a></li>
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Cadastrar novo funcionário</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="pure-menu custom-menu pure-menu-horizontal">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                        <a href="#" id="menuLink1" class="pure-menu-link">{{ funcionario.nome }}</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Finalizar sessão</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    </body>
+</html>
