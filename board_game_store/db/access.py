@@ -1,4 +1,5 @@
 from .connection import Connection
+import random
 
 
 def add_user(cpf, name, surname, birthday):
@@ -10,6 +11,20 @@ def add_user(cpf, name, surname, birthday):
         )
     connection.commit()
     connection.close()
+
+
+def add_game(game):
+    game_id = random.randint(-2 ** 31, 2 ** 31 - 1)
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Jogo VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);',
+            (game_id, game.name, game.producer, game.release_year, game.language,
+             game.players, game.price_rent, game.price_sell, game.storage)
+        )
+    connection.commit()
+    connection.close()
+    return game_id
 
 
 def get_room_reservation():
