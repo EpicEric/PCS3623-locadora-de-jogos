@@ -28,6 +28,7 @@ def add_client_page():
         try:
             add_user(form.cpf.data, form.name.data, form.surname.data, form.birthday.data)
         except Exception as e:
-            return error('Erro no banco de dados: {}'.format(e))
+            import traceback
+            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
         return redirect('success')
     return render_template('clients/add_client.html', form=form)

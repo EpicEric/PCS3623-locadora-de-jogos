@@ -10,7 +10,7 @@ class Connection:
 
     def _get_connection(self):
         if 'DATABASE_URL' in os.environ:
-            params = self._get_heroku_params(os.environ)
+            params = self._get_heroku_params(os.environ['DATABASE_URL'])
         else:
             db_config = config.get('database')
             params = {k: db_config[k] for k in ('database', 'user', 'password', 'host') if k in db_config}
