@@ -1,0 +1,10 @@
+{% extends "base_form.html" %}
+{% block title %}Cadastro de Sala{% endblock %}
+{% block body %}
+<form method="POST" action="/rooms/add-room">
+    {{ form.csrf_token }}<br>
+    {{ form.number.label }} {{ form.number(size=20) }}<br>
+    {{ form.seats.label }} {{ form.seats(size=20) }}<br>
+    <input type="submit" value="Adicionar">
+</form>
+{% endblock %}

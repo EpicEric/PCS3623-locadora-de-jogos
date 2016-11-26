@@ -16,7 +16,9 @@ conteúdo:
     {
         "secret-key": "some long secret key",
         "database": {
-            "user": "Local PostgreSQL user",
-            "password": "Local PostgreSQL password"
+            "host": "PostgreSQL host",
+            "database": "PostgreSQL database",
+            "user": "PostgreSQL user",
+            "password": "PostgreSQL password"
         }
     }
