@@ -27,6 +27,16 @@ def add_game(game):
     return game_id
 
 
+def add_room(number, seats):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Sala VALUES (%s, %s);', (number, seats)
+        )
+    connection.commit()
+    connection.close()
+
+
 def get_room_reservation():
     connection = Connection()
     with connection.cursor() as cursor:
