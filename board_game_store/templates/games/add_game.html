@@ -1,0 +1,16 @@
+{% extends "base_form.html" %}
+{% block title %}Cadastro de Jogo{% endblock %}
+{% block body %}
+<form method="POST" action="/games/add-game">
+    {{ form.csrf_token }}<br>
+    {{ form.name.label }} {{ form.name(size=20) }}<br>
+    {{ form.producer.label }} {{ form.producer(size=20) }}<br>
+    {{ form.release_year.label }} {{ form.release_year }}<br>
+    {{ form.language.label }} {{ form.language(size=20) }}<br>
+    {{ form.players.label }} {{ form.players }}<br>
+    {{ form.price_rent.label }} {{ form.price_rent }}<br>
+    {{ form.price_sell.label }} {{ form.price_sell }}<br>
+    {{ form.storage.label }} {{ form.storage }}<br>
+    <input type="submit" value="Adicionar">
+</form>
+{% endblock %}

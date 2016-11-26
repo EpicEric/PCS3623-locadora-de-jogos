@@ -2,7 +2,7 @@
 <html lang="pt">
     <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
-        <title>Erro!</title>
+        <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -10,15 +10,6 @@
     </head>
     <body>
         <div id="menu"></div>
-        Ocorreu um erro:<br>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                    <li><pre>{{ message }}</pre></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        {% block body %}{% endblock %}
     </body>
 </html>
