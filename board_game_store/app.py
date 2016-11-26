@@ -15,6 +15,11 @@ def root_page():
     return render_template('main_menu.html')
 
 
+@app.route('/login')
+def root_page():
+    return render_template('login.html')
+
+
 @app.route('/success')
 def success_page():
     return render_template('success.html')

@@ -4,6 +4,8 @@
 /board_game_store/config.json
 /htmlcov/
 /venv/
+/.idea/
+/.eggs/
 
 __pycache__
 *.egg-info
