@@ -1,5 +1,7 @@
-import config
+import board_game_store.config as config
+import os
 import psycopg2
+from urllib.parse import urlparse
 
 
 class Connection:
@@ -7,8 +9,23 @@ class Connection:
         self.connection = self._get_connection()
 
     def _get_connection(self):
-        db_config = config.get('database')
-        return psycopg2.connect(database='luderia', user=db_config['user'], password=db_config['password'])
+        if 'DATABASE_URL' in os.environ:
+            params = self._get_heroku_params(os.environ)
+        else:
+            db_config = config.get('database')
+            params = {k: db_config[k] for k in ('database', 'user', 'password', 'host') if k in db_config}
+        return psycopg2.connect(**params)
+
+    def _get_heroku_params(self, url):
+        urlparse.uses_netloc.append('postgres')
+        url = urlparse(url)
+        return {
+            'database': url.path[1:],
+            'user': url.username,
+            'password': url.password,
+            'host': url.hostname,
+            'port': url.port,
+        }
 
     def cursor(self):
         cursor = self.connection.cursor()

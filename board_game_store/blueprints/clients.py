@@ -1,5 +1,5 @@
-from db.access import add_user
-from flask import Blueprint, redirect, render_template, url_for
+from board_game_store.db.access import add_user
+from flask import Blueprint, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField

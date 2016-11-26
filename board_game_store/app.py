@@ -1,5 +1,5 @@
-from blueprints.clients import clients_blueprint
-import config
+from .blueprints.clients import clients_blueprint
+import board_game_store.config as config
 from flask import Flask, render_template
 
 app = Flask(__name__)

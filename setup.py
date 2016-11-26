@@ -39,11 +39,12 @@ setup(
 
     keywords='store database',
 
-    packages=find_packages(),
+    packages=[*find_packages(), 'board_game_store/static', 'board_game_store/static/menu',
+              'board_game_store/templates', 'board_game_store/templates/clients'],
 
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['flask', 'Flask-WTF', 'psycopg2'],
+    install_requires=['flask', 'Flask-WTF', 'gevent', 'gunicorn', 'psycopg2'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,

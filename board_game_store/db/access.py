@@ -1,8 +1,8 @@
-import db.connection
+from .connection import Connection
 
 
 def add_user(cpf, name, surname, birthday):
-    connection = db.connection.Connection()
+    connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
             'INSERT INTO Cliente VALUES (%s, %s, %s, %s);',
@@ -13,7 +13,7 @@ def add_user(cpf, name, surname, birthday):
 
 
 def get_room_reservation():
-    connection = db.connection.Connection()
+    connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
             'SELECT cpf_cliente FROM Reserva_Sala ' +
