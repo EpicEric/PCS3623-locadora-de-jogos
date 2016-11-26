@@ -11,3 +11,8 @@ app.register_blueprint(clients_blueprint)
 @app.route('/')
 def root_page():
     return render_template('main_menu.html')
+
+
+@app.route('/success')
+def success_page():
+    return render_template('success.html')

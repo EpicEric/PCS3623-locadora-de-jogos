@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="pt">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>Erro!</title>
+        <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="{{url_for('static', filename='menu/menu.js')}}" type="application/javascript"></script>
+    </head>
+    <body>
+        <div id="menu"></div>
+        Ocorreu um erro:<br>
+        {{{message}}}
+        <a href="{{page}}">Retornar à página</a>
+    </body>
+</html>
