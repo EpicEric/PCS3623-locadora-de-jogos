@@ -1,5 +1,5 @@
 from board_game_store.db.access import add_user
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField
@@ -18,7 +18,8 @@ class AddClientForm(FlaskForm):
 @clients_blueprint.route('/clients/add-client', methods=['GET', 'POST'])
 def add_client_page():
     def error(message):
-        return redirect('/error', message=message, page='clients/add_client.html')
+        flash(message)
+        return redirect('/error')
     form = AddClientForm()
     if form.validate_on_submit():
         cpf = form.cpf.data

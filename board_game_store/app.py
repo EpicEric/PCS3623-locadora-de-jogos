@@ -16,3 +16,8 @@ def root_page():
 @app.route('/success')
 def success_page():
     return render_template('success.html')
+
+
+@app.route('/error')
+def error_page():
+    return render_template('error.html')
