@@ -16,7 +16,7 @@ def root_page():
 
 
 @app.route('/login')
-def root_page():
+def login_page():
     return render_template('login.html')
 
 
