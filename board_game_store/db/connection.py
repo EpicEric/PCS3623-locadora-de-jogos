@@ -17,7 +17,6 @@ class Connection:
         return psycopg2.connect(**params)
 
     def _get_heroku_params(self, url):
-        urlparse.uses_netloc.append('postgres')
         url = urlparse(url)
         return {
             'database': url.path[1:],
