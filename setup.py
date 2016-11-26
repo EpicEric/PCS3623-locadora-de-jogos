@@ -39,8 +39,10 @@ setup(
 
     keywords='store database',
 
-    packages=[*find_packages(), 'board_game_store/static', 'board_game_store/static/menu',
-              'board_game_store/templates', 'board_game_store/templates/clients'],
+    packages=find_packages() + [
+        'board_game_store/static', 'board_game_store/static/menu',
+        'board_game_store/templates', 'board_game_store/templates/clients'
+    ],
 
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
