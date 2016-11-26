@@ -3,10 +3,13 @@
     <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
         <title>Cadastro de cliente</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <script type="text/javascript" src="script.js"></script>
+        <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="{{url_for('static', filename='menu/menu.js')}}" type="application/javascript"></script>
     </head>
     <body>
+        <div id="menu"></div>
         <form method="POST" action="/clients/add-client">
             {{ form.csrf_token }}<br>
             {{ form.cpf.label }} {{ form.cpf(size=20) }}<br>
