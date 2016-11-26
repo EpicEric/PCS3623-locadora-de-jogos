@@ -43,7 +43,7 @@ setup(
 
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['flask'],
+    install_requires=['flask', 'Flask-WTF', 'psycopg2'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
