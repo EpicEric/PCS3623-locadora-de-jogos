@@ -1,7 +1,11 @@
+from blueprints.clients import clients_blueprint
+import config
 from flask import Flask, render_template
-import dao
 
 app = Flask(__name__)
+config.load(app)
+app.secret_key = config.get('secret-key')
+app.register_blueprint(clients_blueprint)
 
 
 @app.route('/')

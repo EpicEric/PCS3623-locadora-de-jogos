@@ -1,6 +1,7 @@
 .cache
 .coverage
 
+/board_game_store/config.json
 /htmlcov/
 /venv/
 
