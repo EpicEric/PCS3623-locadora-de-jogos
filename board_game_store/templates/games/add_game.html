@@ -1,16 +1,38 @@
 {% extends "base_form.html" %}
 {% block title %}Cadastro de Jogo{% endblock %}
 {% block body %}
-<form method="POST" action="/games/add-game">
-    {{ form.csrf_token }}<br>
-    {{ form.name.label }} {{ form.name(size=20) }}<br>
-    {{ form.producer.label }} {{ form.producer(size=20) }}<br>
-    {{ form.release_year.label }} {{ form.release_year }}<br>
-    {{ form.language.label }} {{ form.language(size=20) }}<br>
-    {{ form.players.label }} {{ form.players }}<br>
-    {{ form.price_rent.label }} {{ form.price_rent }}<br>
-    {{ form.price_sell.label }} {{ form.price_sell }}<br>
-    {{ form.storage.label }} {{ form.storage }}<br>
-    <input type="submit" value="Adicionar">
+<form class="pure-form pure-form-aligned" method="POST" action="/games/add-game">
+    <fieldset>
+        <legend>Cadastrar novo jogo</legend>
+        {{ form.csrf_token }}
+        <div class="pure-control-group">
+            {{ form.name.label }} {{ form.name(size=20) }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.producer.label }} {{ form.producer(size=20) }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.release_year.label }} {{ form.release_year }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.language.label }} {{ form.language(size=20) }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.players.label }} {{ form.players }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.price_rent.label }} {{ form.price_rent }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.price_sell.label }} {{ form.price_sell }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.storage.label }} {{ form.storage }}
+        </div>
+        <div class="pure-control-group">
+        <div class="pure-controls">
+            <input type="submit" class="pure-button pure-button-primary" value="Adicionar">
+        </div>
+    </fieldset>
 </form>
 {% endblock %}
