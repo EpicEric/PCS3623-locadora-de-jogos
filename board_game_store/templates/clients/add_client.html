@@ -1,12 +1,25 @@
 {% extends "base_form.html" %}
 {% block title %}Cadastro de Cliente{% endblock %}
 {% block body %}
-<form method="POST" action="/clients/add-client">
-    {{ form.csrf_token }}<br>
-    {{ form.cpf.label }} {{ form.cpf(size=20) }}<br>
-    {{ form.name.label }} {{ form.name(size=20) }}<br>
-    {{ form.surname.label }} {{ form.surname(size=20) }}<br>
-    {{ form.birthday.label }} {{ form.birthday }}<br>
-    <input type="submit" value="Adicionar">
+<form class="pure-form pure-form-aligned" method="POST" action="/clients/add-client">
+    <fieldset>
+        <legend>Cadastrar novo cliente</legend>
+        {{ form.csrf_token }}
+        <div class="pure-control-group">
+        {{ form.cpf.label }} {{ form.cpf(size=20) }}
+        </div>
+        <div class="pure-control-group">
+        {{ form.name.label }} {{ form.name(size=20) }}
+        </div>
+        <div class="pure-control-group">
+        {{ form.surname.label }} {{ form.surname(size=20) }}
+        </div>
+        <div class="pure-control-group">
+        {{ form.birthday.label }} {{ form.birthday }}
+        </div>
+        <div class="pure-controls">
+            <input type="submit" class="pure-button pure-button-primary" value="Adicionar">
+        </div>
+    </fieldset>
 </form>
 {% endblock %}

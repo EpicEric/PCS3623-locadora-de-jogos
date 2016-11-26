@@ -1,10 +1,19 @@
 {% extends "base_form.html" %}
 {% block title %}Cadastro de Sala{% endblock %}
 {% block body %}
-<form method="POST" action="/rooms/add-room">
-    {{ form.csrf_token }}<br>
-    {{ form.number.label }} {{ form.number(size=20) }}<br>
-    {{ form.seats.label }} {{ form.seats(size=20) }}<br>
-    <input type="submit" value="Adicionar">
+<form class="pure-form pure-form-aligned" method="POST" action="/rooms/add-room">
+    <fieldset>
+        <legend>Cadastrar nova sala</legend>
+        {{ form.csrf_token }}
+        <div class="pure-control-group">
+        {{ form.number.label }} {{ form.number(size=20) }}
+        </div>
+        <div class="pure-control-group">
+        {{ form.seats.label }} {{ form.seats(size=20) }}
+        </div>
+        <div class="pure-controls">
+            <input type="submit" value="Adicionar">
+        </div>
+    </fieldset>
 </form>
 {% endblock %}
