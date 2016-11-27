@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_employee
+from board_game_store.db.access import add_employee, get_all_employee_names
 from board_game_store.models.employee import Employee
 from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
@@ -32,3 +32,15 @@ def add_games_page():
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
         return redirect('success')
     return render_template('employees/add_employee.html', form=form)
+
+@employees_blueprint.route('/employees/list-employees')
+def list_employees_page():
+    def error(message):
+        flash(message)
+        return redirect('/error')
+    try:
+        employee_list = get_all_employee_names()
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    return render_template('employees/list_employees.html', employee_list=employee_list)

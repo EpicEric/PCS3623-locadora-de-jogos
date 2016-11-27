@@ -1,0 +1,16 @@
+{% extends "base_info.html" %}
+{% block title %}Seleção de Cliente{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Selecionar cliente</legend>
+        <div class="pure-g">
+            {% for item in client_list %}
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <a href="/clients/view-client?cpf={{ item[0] }}">{{ item[1] }} {{ item[2] }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

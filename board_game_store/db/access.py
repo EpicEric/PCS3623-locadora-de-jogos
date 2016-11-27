@@ -2,7 +2,7 @@ from .connection import Connection
 import random
 
 
-def add_user(cpf, name, surname, birthday):
+def add_client(cpf, name, surname, birthday):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
@@ -59,6 +59,15 @@ def add_exemplar(exemplar_id, game_id):
     connection.close()
 
 
+def get_all_client_names():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT cpf_cliente, nome, sobrenome FROM Cliente ORDER BY nome, sobrenome;')
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
+
 def get_all_game_names():
     connection = Connection()
     with connection.cursor() as cursor:
@@ -76,6 +85,15 @@ def get_room_reservation():
             'WHERE num_sala = 1 AND horario_inicio < LOCALTIMESTAMP AND ' +
             'horario_fim > LOCALTIMESTAMP;'
         )
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
+
+def get_all_employee_names():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT cpf_funcionario, nome, sobrenome FROM Funcionario ORDER BY nome, sobrenome;')
         data = cursor.fetchall()
     connection.close()
     return data
