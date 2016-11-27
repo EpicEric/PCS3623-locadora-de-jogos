@@ -59,6 +59,17 @@ def add_exemplar(exemplar_id, game_id):
     connection.close()
 
 
+def add_reservation(room_id, start, end, client_cpf, employee_cpf):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Reserva_Sala VALUES (%s, %s, %s, %s, %s);',
+            (room_id, start, end, client_cpf, employee_cpf)
+        )
+    connection.commit()
+    connection.close()
+
+
 def get_all_client_names():
     connection = Connection()
     with connection.cursor() as cursor:
@@ -77,7 +88,7 @@ def get_all_game_names():
     return data
 
 
-def get_all_room_numbers(seats, time):
+def get_all_room_numbers():
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT numero FROM Sala;')
