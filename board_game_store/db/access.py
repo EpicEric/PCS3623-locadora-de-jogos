@@ -63,13 +63,13 @@ def add_exemplar(exemplar_id, game_id):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO Exemplar VALUES (%s, %s);', (exemplar_id, game_id)
+            'INSERT INTO Exemplar_Aluguel VALUES (%s, %s);', (exemplar_id, game_id)
         )
     connection.commit()
     connection.close()
 
 
-def get_all_games_names():
+def get_all_game_names():
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT id_jogo,nome FROM Jogo ORDER BY nome;')
