@@ -57,14 +57,15 @@ def add_exemplar_page():
         return redirect('success')
     return render_template('games/add_exemplar.html', form=form)
 
+
 @games_blueprint.route('/games/list-games')
 def list_games_page():
     def error(message):
         flash(message)
         return redirect('/error')
     try:
-        list = get_all_games_names()
+        game_list = get_all_game_names()
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-    return render_template('games/list_games.html', list=list)
+    return render_template('games/list_games.html', game_list=game_list)
