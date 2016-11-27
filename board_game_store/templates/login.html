@@ -3,34 +3,38 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Acessar sistema - Locadora de Jogos</title>
+        <title>Acesso ao Sistema</title>
         <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     </head>
 
     <body>
         <div class="form-box">
-            <form class="pure-form pure-form-aligned">
+            <form class="pure-form pure-form-aligned" method="POST" action="/login">
                 <fieldset>
                     <legend>Acessar sistema</legend>
 
+                    {{ form.csrf_token }}
+
                     {% if invalid_login %}
-                    <div class="pure-control-group warning">Login inválido. Por favor, tente novamente.</div>
+                    <div class="pure-control-group warning">Credenciais inválidas. Por favor, tente novamente.</div>
                     {% endif %}
 
                     <div class="pure-control-group">
-                        <label for="name">Usuário</label>
-                        <input id="name" type="text" placeholder="Username">
+                        {{ form.cpf.label }} {{ form.cpf(required=True) }}
                     </div>
 
                     <div class="pure-control-group">
-                        <label for="password">Senha</label>
-                        <input id="password" type="password" placeholder="Password">
+                        {{ form.password.label }} {{ form.password(required=True) }}
                     </div>
 
-                    <label for="forgot" class="pure-link">
-                        <a href="#">Esqueci a senha</a>
-                    </label>
+                    <!--
+                    <div class="pure-control-group">
+                        <label for="forgot" class="pure-link">
+                            <a href="#">Esqueci a senha</a>
+                        </label>
+                    </div>
+                    -->
 
                     <div class="pure-controls">
                         <button type="submit" class="pure-button pure-button-primary">Iniciar sessão</button>

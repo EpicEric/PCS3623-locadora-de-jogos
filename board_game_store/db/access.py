@@ -41,9 +41,9 @@ def add_employee(employee):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s);',
+            'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s, %s);',
             (employee.cpf, employee.name, employee.surname, employee.role,
-             employee.salary, employee.supervisor)
+             employee.salary, employee.supervisor, employee.password)
         )
     connection.commit()
     connection.close()
@@ -57,6 +57,22 @@ def add_exemplar(exemplar_id, game_id):
         )
     connection.commit()
     connection.close()
+
+
+def validate_login(cpf, password):
+    try:
+        connection = Connection()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            )
+            data = cursor.fetchone()
+            connection.close()
+            if data is not None:
+                return data[0] == password
+    except Exception as e:
+        return False
+    return False
 
 
 def get_all_client_names():
