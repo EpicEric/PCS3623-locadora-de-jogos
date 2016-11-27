@@ -5,9 +5,9 @@
     <fieldset>
         <legend>Selecionar jogo</legend>
         <div class="pure-g">
-            {% for game in games %}
+            {% for item in list %}
                 <div class="pure-u-1 pure-u-md-1-3">
-                    <a href="/games/view_game?id={{ game.id }}">{{ game.name }}</a>
+                    <a href="/games/view_game?id={{ item[0] }}">{{ item[1] }}</a>
                 </div>
             {% endfor %}
         </div>
