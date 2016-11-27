@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, SelectField, StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, NumberRange
-from flask_login import login_required
+from flask_login import current_user, login_required
 
 rooms_blueprint = Blueprint('rooms', __name__, template_folder='templates')
 
@@ -57,6 +57,7 @@ def list_rooms_page():
 
 
 @rooms_blueprint.route('/rooms/reserve-room', methods=['GET', 'POST'])
+@login_required
 def reserve_room_page():
     def error(message):
         flash(message)
@@ -68,12 +69,12 @@ def reserve_room_page():
             end_time = datetime.strptime('{} {}'.format(form.end_date.data, form.end_time.data), '%Y-%m-%d %H:%M')
             if end_time < desired_time:
                 return error('Tempo de fim deve ser maior que tempo de início')
-            add_reservation(form.room.data, desired_time, end_time, form.client_cpf.data, None)
+            add_reservation(form.room.data, desired_time, end_time, form.client_cpf.data, current_user.get_id())
             return redirect('success')
         else:
             try:
                 form.room.choices = [
-                    (x[0], '{} - {}'.format(x[0], x[1]))
+                    (x[0], '{} - Livre até {}'.format(x[0], x[1]))
                     for x in get_free_rooms(form.seats.data, desired_time)
                 ]
                 return render_template('rooms/reserve_room.html', form=form)
