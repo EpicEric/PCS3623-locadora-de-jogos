@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
+from flask_login import login_required
 
 clients_blueprint = Blueprint('clients', __name__, template_folder='templates')
 
@@ -16,6 +17,7 @@ class AddClientForm(FlaskForm):
 
 
 @clients_blueprint.route('/clients/add-client', methods=['GET', 'POST'])
+@login_required
 def add_client_page():
     def error(message):
         flash(message)
@@ -34,6 +36,7 @@ def add_client_page():
     return render_template('clients/add_client.html', form=form)
 
 @clients_blueprint.route('/clients/list-clients')
+@login_required
 def list_clients_page():
     def error(message):
         flash(message)

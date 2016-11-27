@@ -4,6 +4,7 @@ from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
+from flask_login import login_required
 
 employees_blueprint = Blueprint('employee', __name__, template_folder='templates')
 
@@ -19,6 +20,7 @@ class AddEmployeeForm(FlaskForm):
 
 
 @employees_blueprint.route('/employees/add-employee', methods=['GET', 'POST'])
+@login_required
 def add_games_page():
     def error(message):
         flash(message)
@@ -35,6 +37,7 @@ def add_games_page():
     return render_template('employees/add_employee.html', form=form)
 
 @employees_blueprint.route('/employees/list-employees')
+@login_required
 def list_employees_page():
     def error(message):
         flash(message)

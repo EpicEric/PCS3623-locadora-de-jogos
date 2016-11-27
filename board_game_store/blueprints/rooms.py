@@ -3,6 +3,7 @@ from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
 from wtforms.validators import DataRequired, NumberRange
+from flask_login import login_required
 
 rooms_blueprint = Blueprint('rooms', __name__, template_folder='templates')
 
@@ -13,6 +14,7 @@ class AddRoomForm(FlaskForm):
 
 
 @rooms_blueprint.route('/rooms/add-room', methods=['GET', 'POST'])
+@login_required
 def add_rooms_page():
     def error(message):
         flash(message)
@@ -28,6 +30,7 @@ def add_rooms_page():
     return render_template('rooms/add_room.html', form=form)
 
 @rooms_blueprint.route('/rooms/list-rooms')
+@login_required
 def list_rooms_page():
     def error(message):
         flash(message)
