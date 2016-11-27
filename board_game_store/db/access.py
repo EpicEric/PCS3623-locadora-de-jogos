@@ -77,13 +77,29 @@ def get_all_game_names():
     return data
 
 
-def get_all_room_numbers():
+def get_free_rooms(seats, time):
     connection = Connection()
     with connection.cursor() as cursor:
-        cursor.execute('SELECT numero FROM Sala ORDER BY numero;')
-        data = cursor.fetchall()
+        cursor.execute(
+            'SELECT numero FROM Sala, Reserva_Sala ' +
+            'WHERE num_sala = numero AND lugares >= %s AND ' +
+            'numero NOT IN (SELECT num_sala FROM Reserva_Sala WHERE horario_inicio <= %s and horario_fim > %s) ' +
+            'UNION SELECT numero FROM Sala ' +
+            'WHERE numero NOT IN (SELECT num_sala FROM Reserva_Sala)',
+            (seats, time, time)
+        )
+        ids = tuple(x[0] for x in cursor.fetchall())
+        cursor.execute(
+            'SELECT numero, MIN(horario_inicio)  FROM Sala, Reserva_Sala ' +
+            'WHERE num_sala = numero AND numero in %s AND horario_inicio > %s ' +
+            'GROUP BY numero;',
+            (ids, time)
+        )
+        max_time = dict(cursor.fetchall())
+        data = [(room_id, max_time.get(room_id, 'Sem reserva futura')) for room_id in ids]
     connection.close()
     return data
+
 
 def get_room_reservation():
     connection = Connection()
