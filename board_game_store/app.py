@@ -14,7 +14,7 @@ app.register_blueprint(rooms_blueprint)
 
 @app.route('/')
 def root_page():
-    return render_template('main_menu.html')
+    return render_template('main_page.html')
 
 
 @app.route('/login')

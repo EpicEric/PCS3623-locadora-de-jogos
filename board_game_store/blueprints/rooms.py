@@ -9,7 +9,7 @@ rooms_blueprint = Blueprint('rooms', __name__, template_folder='templates')
 
 class AddRoomForm(FlaskForm):
     number = IntegerField('Número', validators=[DataRequired(), NumberRange(min=1, max=1000)])
-    seats = IntegerField('Assentos', validators=[DataRequired(), NumberRange(min=1, max=1000)])
+    seats = IntegerField('Lugares', validators=[DataRequired(), NumberRange(min=1, max=1000)])
 
 
 @rooms_blueprint.route('/rooms/add-room', methods=['GET', 'POST'])
