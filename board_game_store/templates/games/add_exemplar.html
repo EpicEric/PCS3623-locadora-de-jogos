@@ -1,0 +1,19 @@
+{% extends "base_form.html" %}
+{% block title %}Cadastro de Exemplar{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-aligned" method="POST" action="/games/add-exemplar">
+    <fieldset>
+        <legend>Cadastrar novo exemplar</legend>
+        {{ form.csrf_token }}
+        <div class="pure-control-group">
+            {{ form.exemplar_id.label }} {{ form.exemplar_id(size=20, required=True) }}
+        </div>
+        <div class="pure-control-group">
+            {{ form.game_name.label }} {{ form.game_name(size=20, required=True) }}
+        </div>
+        <div class="pure-controls">
+            <input type="submit" class="pure-button pure-button-primary" value="Cadastrar">
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

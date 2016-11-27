@@ -1,8 +1,8 @@
-from board_game_store.db.access import add_game
+from board_game_store.db.access import add_exemplar, add_game, get_all_games_names
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, IntegerField, StringField
+from wtforms import DecimalField, IntegerField, SelectField, StringField
 from wtforms.validators import DataRequired, NumberRange
 
 games_blueprint = Blueprint('games', __name__, template_folder='templates')
@@ -17,6 +17,11 @@ class AddGameForm(FlaskForm):
     price_rent = DecimalField('Preço de aluguel', validators=[DataRequired()])
     price_sell = DecimalField('Preço de venda', validators=[DataRequired()])
     storage = IntegerField('Quantidade em estoque', validators=[DataRequired(), NumberRange(min=0)])
+
+
+class AddExemplarForm(FlaskForm):
+    exemplar_id = IntegerField('Identificador', validators=[DataRequired(), NumberRange(min=1, max=40)])
+    game_name = SelectField('Jogo', validators=[DataRequired()])
 
 
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
@@ -34,3 +39,20 @@ def add_games_page():
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
         return redirect('success')
     return render_template('games/add_game.html', form=form)
+
+
+@games_blueprint.route('/games/add-exemplar', methods=['GET', 'POST'])
+def add_exemplar_page():
+    def error(message):
+        flash(message)
+        return redirect('/error')
+    form = AddExemplarForm()
+    form.game_name.choices = get_all_games_names()
+    if form.validate_on_submit():
+        try:
+            add_exemplar(form.exemplar_id.data, form.game_name.data)
+        except Exception as e:
+            import traceback
+            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        return redirect('success')
+    return render_template('games/add_exemplar.html', form=form)
