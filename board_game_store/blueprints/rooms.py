@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, SelectField, StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, NumberRange
+from flask_login import login_required
 
 rooms_blueprint = Blueprint('rooms', __name__, template_folder='templates')
 
@@ -25,6 +26,7 @@ class ViewRoomForm(FlaskForm):
 
 
 @rooms_blueprint.route('/rooms/add-room', methods=['GET', 'POST'])
+@login_required
 def add_rooms_page():
     def error(message):
         flash(message)
@@ -41,6 +43,7 @@ def add_rooms_page():
 
 
 @rooms_blueprint.route('/rooms/list-rooms')
+@login_required
 def list_rooms_page():
     def error(message):
         flash(message)

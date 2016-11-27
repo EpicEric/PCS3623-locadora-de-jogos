@@ -41,9 +41,9 @@ def add_employee(employee):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s);',
+            'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s, %s);',
             (employee.cpf, employee.name, employee.surname, employee.role,
-             employee.salary, employee.supervisor)
+             employee.salary, employee.supervisor, employee.password)
         )
     connection.commit()
     connection.close()
@@ -139,5 +139,32 @@ def get_all_employee_names():
     with connection.cursor() as cursor:
         cursor.execute('SELECT cpf_funcionario, nome, sobrenome FROM Funcionario ORDER BY nome, sobrenome;')
         data = cursor.fetchall()
+    connection.close()
+    return data
+
+
+def validate_login(cpf, password):
+    try:
+        connection = Connection()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            )
+            data = cursor.fetchone()
+            connection.close()
+            if data is not None:
+                return data[0] == password
+    except Exception as e:
+        return False
+    return False
+
+
+def get_employee_name_by_cpf(cpf):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT nome, sobrenome FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+        )
+        data = cursor.fetchone()
     connection.close()
     return data

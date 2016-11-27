@@ -4,6 +4,7 @@ from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import DecimalField, IntegerField, SelectField, StringField
 from wtforms.validators import DataRequired, NumberRange
+from flask_login import login_required
 
 games_blueprint = Blueprint('games', __name__, template_folder='templates')
 
@@ -25,6 +26,7 @@ class AddExemplarForm(FlaskForm):
 
 
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
+@login_required
 def add_games_page():
     def error(message):
         flash(message)
@@ -42,6 +44,7 @@ def add_games_page():
 
 
 @games_blueprint.route('/games/add-exemplar', methods=['GET', 'POST'])
+@login_required
 def add_exemplar_page():
     def error(message):
         flash(message)
@@ -59,6 +62,7 @@ def add_exemplar_page():
 
 
 @games_blueprint.route('/games/list-games')
+@login_required
 def list_games_page():
     def error(message):
         flash(message)
