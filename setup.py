@@ -7,7 +7,6 @@ from os import path
 with open(path.join(path.abspath(path.dirname(__file__)), 'README.rst')) as f:
     long_description = f.read()
 
-tests_require = ['flake8', 'mock', 'pytest', 'pytest-flake8']
 setup(
     name='board_game_store',
 
@@ -40,23 +39,13 @@ setup(
     keywords='store database',
 
     packages=find_packages() + [
-        'board_game_store/static', 'board_game_store/static/menu',
+        'board_game_store/static',
         'board_game_store/templates', 'board_game_store/templates/clients'
     ],
 
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['flask', 'Flask-WTF', 'gevent', 'gunicorn', 'psycopg2'],
-
-    # List additional groups of dependencies here (e.g. development
-    # dependencies). You can install these using the following syntax,
-    # for example:
-    # $ pip install -e .[dev,test]
-    extras_require={'test': tests_require},
-
-    setup_requires=['pytest-runner'],
-
-    tests_require=tests_require,
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.

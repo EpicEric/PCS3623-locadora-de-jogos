@@ -1,6 +1,6 @@
-from board_game_store.db.access import add_exemplar, add_game, get_all_games_names
+from board_game_store.db.access import add_exemplar, add_game, get_all_game_names
 from board_game_store.models.game import Game
-from flask import Blueprint, flash, redirect, render_template
+from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import DecimalField, IntegerField, SelectField, StringField
 from wtforms.validators import DataRequired, NumberRange
@@ -21,7 +21,7 @@ class AddGameForm(FlaskForm):
 
 class AddExemplarForm(FlaskForm):
     exemplar_id = IntegerField('Identificador', validators=[DataRequired(), NumberRange(min=1, max=40)])
-    game_name = SelectField('Jogo', validators=[DataRequired()])
+    game_name = SelectField('Jogo')
 
 
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
@@ -47,8 +47,8 @@ def add_exemplar_page():
         flash(message)
         return redirect('/error')
     form = AddExemplarForm()
-    form.game_name.choices = get_all_games_names()
-    if form.validate_on_submit():
+    form.game_name.choices = get_all_game_names()
+    if request.method == 'POST':
         try:
             add_exemplar(form.exemplar_id.data, form.game_name.data)
         except Exception as e:
