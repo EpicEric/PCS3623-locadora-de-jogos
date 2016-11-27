@@ -43,4 +43,5 @@ def list_employees_page():
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-    return render_template('employees/list_employees.html', employee_list=employee_list)
+    form = AddEmployeeForm()
+    return render_template('employees/list_employees.html', employee_list=employee_list, form=form)

@@ -77,6 +77,14 @@ def get_all_game_names():
     return data
 
 
+def get_all_room_numbers():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT numero FROM Sala ORDER BY numero;')
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
 def get_room_reservation():
     connection = Connection()
     with connection.cursor() as cursor:

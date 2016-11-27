@@ -43,4 +43,5 @@ def list_clients_page():
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-    return render_template('clients/list_clients.html', client_list=client_list)
+    form = AddClientForm()
+    return render_template('clients/list_clients.html', client_list=client_list, form=form)

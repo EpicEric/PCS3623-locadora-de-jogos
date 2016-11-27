@@ -1,6 +1,13 @@
 {% extends "base_info.html" %}
 {% block title %}Seleção de Funcionario{% endblock %}
 {% block body %}
+<form class="pure-form" method="GET" action="/employees/view-employee">
+    <fieldset>
+        <legend>Buscar funcionário</legend>
+        {{ form.cpf(size=20,placeholder=form.cpf.label.text) }}
+        <input type="submit" class="pure-button pure-button-primary" value="Buscar">
+    </fieldset>
+</form>
 <form class="pure-form pure-form-stacked">
     <fieldset>
         <legend>Selecionar funcionário</legend>

@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_room
+from board_game_store.db.access import add_room, get_all_room_numbers
 from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
@@ -26,3 +26,15 @@ def add_rooms_page():
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
         return redirect('success')
     return render_template('rooms/add_room.html', form=form)
+
+@rooms_blueprint.route('/rooms/list-rooms')
+def list_rooms_page():
+    def error(message):
+        flash(message)
+        return redirect('/error')
+    try:
+        room_list = get_all_room_numbers()
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    return render_template('rooms/list_rooms.html', room_list=room_list)

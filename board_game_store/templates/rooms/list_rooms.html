@@ -1,0 +1,16 @@
+{% extends "base_info.html" %}
+{% block title %}Seleção de Sala{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Selecionar sala</legend>
+        <div class="pure-g">
+            {% for item in room_list %}
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
