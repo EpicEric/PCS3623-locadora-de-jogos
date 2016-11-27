@@ -14,7 +14,7 @@ class AddEmployeeForm(FlaskForm):
     surname = StringField('Sobrenome', validators=[DataRequired()])
     role = StringField('Função', validators=[DataRequired()])
     salary = StringField('Salário', validators=[DataRequired()])
-    supervisor = StringField('Supervisor', validators=[DataRequired()])
+    supervisor = StringField('CPF do supervisor', validators=[DataRequired()])
 
 
 @employees_blueprint.route('/employees/add-employee', methods=['GET', 'POST'])
