@@ -33,5 +33,6 @@ def login_page():
 @login_blueprint.route('/logout')
 @login_required
 def logout_page():
+    current_user.remove_username()
     logout_user()
     return redirect("/")

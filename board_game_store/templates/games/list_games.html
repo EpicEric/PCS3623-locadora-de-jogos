@@ -4,13 +4,15 @@
 <form class="pure-form pure-form-stacked">
     <fieldset>
         <legend>Selecionar jogo</legend>
-        <div class="pure-g">
-            {% for item in game_list %}
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <a href="/games/view-game?id={{ item[0] }}">{{ item[1] }}</a>
-                </div>
-            {% endfor %}
-        </div>
+        <center>
+            <div class="pure-g">
+                {% for item in game_list %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/games/view-game?id={{ item[0] }}">{{ item[1] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
     </fieldset>
 </form>
 {% endblock %}

@@ -4,20 +4,24 @@
 <form class="pure-form" method="GET" action="/employees/view-employee">
     <fieldset>
         <legend>Buscar funcionário</legend>
-        {{ form.cpf(size=20,placeholder=form.cpf.label.text) }}
-        <input type="submit" class="pure-button pure-button-primary" value="Buscar">
+        <center>
+            {{ form.cpf(size=20,placeholder=form.cpf.label.text) }}
+            <input type="submit" class="pure-button pure-button-primary" value="Buscar">
+        </center>
     </fieldset>
 </form>
 <form class="pure-form pure-form-stacked">
     <fieldset>
         <legend>Selecionar funcionário</legend>
-        <div class="pure-g">
-            {% for item in employee_list %}
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <a href="/employees/view-employee?cpf={{ item[0] }}">{{ item[1] }} {{ item[2] }}</a>
-                </div>
-            {% endfor %}
-        </div>
+        <center>
+            <div class="pure-g">
+                {% for item in employee_list %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/employees/view-employee?cpf={{ item[0] }}">{{ item[1] }} {{ item[2] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
     </fieldset>
 </form>
 {% endblock %}

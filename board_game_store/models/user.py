@@ -13,10 +13,8 @@ class User(UserMixin):
             name_tuple = get_employee_name_by_cpf(cpf)
             self.usernames[cpf] = name_tuple[0] + " " + name_tuple[1]
         self.name = self.usernames[cpf]
-        print(self.usernames)
 
     def is_authenticated():
-        # TODO
         return self.is_authenticated
 
     def get_id():
@@ -30,3 +28,6 @@ class User(UserMixin):
 
     def is_anonymous():
         return False
+
+    def remove_username(user):
+        del user.usernames[user.cpf]

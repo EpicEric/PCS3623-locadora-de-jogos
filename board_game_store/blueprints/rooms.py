@@ -18,9 +18,8 @@ class AddRoomForm(FlaskForm):
 class ViewRoomForm(FlaskForm):
     seats = IntegerField('Número de pessoas', validators=[DataRequired(), NumberRange(min=1, max=30)])
     date = DateField('Dia', validators=[DataRequired()])
-    time = StringField('Horário', validators=[DataRequired()])
+    time = StringField('Horário de início', validators=[DataRequired()])
     room = SelectField('Salas disponíveis')
-    end_date = DateField('Data de fim')
     end_time = StringField('Horário de fim')
     client_cpf = StringField('CPF do cliente')
 
@@ -66,7 +65,7 @@ def reserve_room_page():
     if request.method == 'POST':
         desired_time = datetime.strptime('{} {}'.format(form.date.data, form.time.data), '%Y-%m-%d %H:%M')
         if form.room.data != 'None':
-            end_time = datetime.strptime('{} {}'.format(form.end_date.data, form.end_time.data), '%Y-%m-%d %H:%M')
+            end_time = datetime.strptime('{} {}'.format(form.date.data, form.end_time.data), '%Y-%m-%d %H:%M')
             if end_time < desired_time:
                 return error('Tempo de fim deve ser maior que tempo de início')
             add_reservation(form.room.data, desired_time, end_time, form.client_cpf.data, current_user.get_id())

@@ -1,4 +1,5 @@
 from .connection import Connection
+from werkzeug.security import generate_password_hash, check_password_hash
 import random
 
 
@@ -43,7 +44,7 @@ def add_employee(employee):
         cursor.execute(
             'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s, %s);',
             (employee.cpf, employee.name, employee.surname, employee.role,
-             employee.salary, employee.supervisor, employee.password)
+             employee.salary, employee.supervisor, generate_password_hash(employee.password))
         )
     connection.commit()
     connection.close()
@@ -153,7 +154,7 @@ def validate_login(cpf, password):
             data = cursor.fetchone()
             connection.close()
             if data is not None:
-                return data[0] == password
+                return check_password_hash(data[0], password)
     except Exception as e:
         return False
     return False
