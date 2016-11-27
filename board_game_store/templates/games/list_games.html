@@ -1,0 +1,16 @@
+{% extends "base_info.html" %}
+{% block title %}Seleção de Jogo{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Selecionar jogo</legend>
+        <div class="pure-g">
+            {% for game in games %}
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <a href="/games/view_game?id={{ game.id }}">{{ game.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

@@ -26,6 +26,16 @@ def add_game(game):
     connection.close()
     return game_id
 
+def list_games():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT * FROM Jogo'
+        )
+        for game in cursor.fetchall():
+        data = cursor.fetchall()
+    return None
+
 
 def add_room(number, seats):
     connection = Connection()
