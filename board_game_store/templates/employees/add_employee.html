@@ -1,0 +1,28 @@
+{% extends "base_form.html" %}
+{% block title %}Cadastro de Funcionário{% endblock %}
+{% block body %}
+<form method="POST" action="/employees/add-employee">
+    {{ form.csrf_token }}<br>
+    <div class="pure-control-group">
+        {{ form.cpf.label }} {{ form.cpf(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control-group">
+        {{ form.name.label }} {{ form.name(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control-group">
+        {{ form.surname.label }} {{ form.surname(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control-group">
+        {{ form.role.label }} {{ form.role(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control-group">
+        {{ form.salary.label }} {{ form.salary(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control-group">
+        {{ form.supervisor.label }} {{ form.supervisor(size=20, required=True) }}<br>
+    </div>
+    <div class="pure-control">
+    <input type="submit" value="Adicionar">
+    </div>
+</form>
+{% endblock %}

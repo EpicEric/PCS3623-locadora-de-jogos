@@ -37,6 +37,18 @@ def add_room(number, seats):
     connection.close()
 
 
+def add_employee(employee):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Funcionario VALUES (%s, %s, %s, %s, %s, %s);',
+            (employee.cpf, employee.name, employee.surname, employee.role,
+             employee.salary, employee.supervisor)
+        )
+    connection.commit()
+    connection.close()
+
+
 def get_room_reservation():
     connection = Connection()
     with connection.cursor() as cursor:

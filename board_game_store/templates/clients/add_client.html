@@ -6,16 +6,16 @@
         <legend>Cadastrar novo cliente</legend>
         {{ form.csrf_token }}
         <div class="pure-control-group">
-        {{ form.cpf.label }} {{ form.cpf(size=20) }}
+        {{ form.cpf.label }} {{ form.cpf(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-        {{ form.name.label }} {{ form.name(size=20) }}
+        {{ form.name.label }} {{ form.name(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-        {{ form.surname.label }} {{ form.surname(size=20) }}
+        {{ form.surname.label }} {{ form.surname(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-        {{ form.birthday.label }} {{ form.birthday }}
+        {{ form.birthday.label }} {{ form.birthday(required=True) }}
         </div>
         <div class="pure-controls">
             <input type="submit" class="pure-button pure-button-primary" value="Cadastrar">

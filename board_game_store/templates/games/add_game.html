@@ -6,30 +6,29 @@
         <legend>Cadastrar novo jogo</legend>
         {{ form.csrf_token }}
         <div class="pure-control-group">
-            {{ form.name.label }} {{ form.name(size=20) }}
+            {{ form.name.label }} {{ form.name(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.producer.label }} {{ form.producer(size=20) }}
+            {{ form.producer.label }} {{ form.producer(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.release_year.label }} {{ form.release_year }}
+            {{ form.release_year.label }} {{ form.release_year(required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.language.label }} {{ form.language(size=20) }}
+            {{ form.language.label }} {{ form.language(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.players.label }} {{ form.players }}
+            {{ form.players.label }} {{ form.players(required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.price_rent.label }} {{ form.price_rent }}
+            {{ form.price_rent.label }} {{ form.price_rent(required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.price_sell.label }} {{ form.price_sell }}
+            {{ form.price_sell.label }} {{ form.price_sell(required=True) }}
         </div>
         <div class="pure-control-group">
-            {{ form.storage.label }} {{ form.storage }}
+            {{ form.storage.label }} {{ form.storage(required=True) }}
         </div>
-        <div class="pure-control-group">
         <div class="pure-controls">
             <input type="submit" class="pure-button pure-button-primary" value="Cadastrar">
         </div>
