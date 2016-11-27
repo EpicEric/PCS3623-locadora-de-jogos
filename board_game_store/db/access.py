@@ -59,22 +59,6 @@ def add_exemplar(exemplar_id, game_id):
     connection.close()
 
 
-def validate_login(cpf, password):
-    try:
-        connection = Connection()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
-            )
-            data = cursor.fetchone()
-            connection.close()
-            if data is not None:
-                return data[0] == password
-    except Exception as e:
-        return False
-    return False
-
-
 def get_all_client_names():
     connection = Connection()
     with connection.cursor() as cursor:
@@ -119,5 +103,32 @@ def get_all_employee_names():
     with connection.cursor() as cursor:
         cursor.execute('SELECT cpf_funcionario, nome, sobrenome FROM Funcionario ORDER BY nome, sobrenome;')
         data = cursor.fetchall()
+    connection.close()
+    return data
+
+
+def validate_login(cpf, password):
+    try:
+        connection = Connection()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            )
+            data = cursor.fetchone()
+            connection.close()
+            if data is not None:
+                return data[0] == password
+    except Exception as e:
+        return False
+    return False
+
+
+def get_employee_name_by_cpf(cpf):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT nome, sobrenome FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+        )
+        data = cursor.fetchone()
     connection.close()
     return data

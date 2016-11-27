@@ -4,7 +4,7 @@ from flask import Blueprint, flash, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 
 login_blueprint = Blueprint('login', __name__, template_folder='templates')
 
