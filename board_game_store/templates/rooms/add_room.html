@@ -6,10 +6,10 @@
         <legend>Cadastrar nova sala</legend>
         {{ form.csrf_token }}
         <div class="pure-control-group">
-        {{ form.number.label }} {{ form.number(size=20) }}
+        {{ form.number.label }} {{ form.number(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
-        {{ form.seats.label }} {{ form.seats(size=20) }}
+        {{ form.seats.label }} {{ form.seats(size=20, required=True) }}
         </div>
         <div class="pure-controls">
             <input type="submit" class="pure-button pure-button-primary" value="Cadastrar">
