@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_reservation, add_room, get_all_room_numbers, get_free_rooms
+from board_game_store.db.access import add_reservation, add_room, get_all_room_numbers, get_free_rooms, get_room_info
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -53,6 +53,27 @@ def list_rooms_page():
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     return render_template('rooms/list_rooms.html', room_list=room_list)
+
+
+@rooms_blueprint.route('/rooms/view-room')
+@login_required
+def view_room_page():
+    def error(message):
+        flash(message)
+        return redirect('/error')
+    try:
+        room_number = request.args.get('number', '')
+        room_tuple = get_room_info(room_number)
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+
+    form = AddRoomForm()
+
+    form.number.data = room_tuple[0]
+    form.seats.data = room_tuple[1]
+
+    return render_template('rooms/view_room.html', form=form)
 
 
 @rooms_blueprint.route('/rooms/reserve-room', methods=['GET', 'POST'])

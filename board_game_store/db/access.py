@@ -96,6 +96,17 @@ def get_all_client_names():
     return data
 
 
+def get_room_info(number):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT numero, lugares FROM Sala WHERE numero = \'%s\';' % (number)
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data
+
+
 def get_client_info(cpf):
     connection = Connection()
     with connection.cursor() as cursor:
@@ -111,7 +122,8 @@ def get_employee_info(cpf):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
-            'SELECT cpf_funcionario, nome, sobrenome, funcao, salario, cpf_supervisor FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            'SELECT cpf_funcionario, nome, sobrenome, funcao, salario, cpf_supervisor ' +
+            'FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
         )
         data = cursor.fetchone()
     connection.close()
