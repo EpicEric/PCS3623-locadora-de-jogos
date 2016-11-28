@@ -80,6 +80,17 @@ def get_all_client_names():
     return data
 
 
+def get_client_info(cpf):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT cpf_cliente, nome, sobrenome, aniversario FROM Cliente WHERE cpf_cliente = \'%s\';' % (cpf)
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data
+
+
 def get_all_game_names():
     connection = Connection()
     with connection.cursor() as cursor:
