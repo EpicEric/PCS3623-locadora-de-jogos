@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_exemplar, add_game, get_all_game_names
+from board_game_store.db.access import add_exemplar, add_game, get_all_game_names, get_all_exemplars
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -25,12 +25,14 @@ class AddExemplarForm(FlaskForm):
     game_name = SelectField('Jogo')
 
 
+def error(message):
+    flash(message)
+    return redirect('/error')
+
+
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
 @login_required
 def add_games_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
     form = AddGameForm()
     if form.validate_on_submit():
         try:
@@ -46,9 +48,6 @@ def add_games_page():
 @games_blueprint.route('/games/add-exemplar', methods=['GET', 'POST'])
 @login_required
 def add_exemplar_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
     form = AddExemplarForm()
     form.game_name.choices = get_all_game_names()
     if request.method == 'POST':
@@ -64,12 +63,20 @@ def add_exemplar_page():
 @games_blueprint.route('/games/list-games')
 @login_required
 def list_games_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
     try:
         game_list = get_all_game_names()
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     return render_template('games/list_games.html', game_list=game_list)
+
+
+@games_blueprint.route('/games/list-exemplars')
+@login_required
+def list_exemplars_page():
+    try:
+        exemplar_list = [(x[0], '{} - {}'.format(x[0], x[1])) for x in get_all_exemplars()]
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    return render_template('games/list_exemplars.html', exemplar_list=exemplar_list)

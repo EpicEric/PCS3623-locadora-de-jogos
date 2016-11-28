@@ -38,10 +38,7 @@ setup(
 
     keywords='store database',
 
-    packages=find_packages() + [
-        'board_game_store/static',
-        'board_game_store/templates', 'board_game_store/templates/clients'
-    ],
+    packages=find_packages(),
 
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
@@ -49,7 +46,11 @@ setup(
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.
-    package_data={},
+    package_data={
+        'board_game_store': [
+            'static/*', 'templates/*.html', 'templates/*/*'
+        ]
+    },
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
