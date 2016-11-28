@@ -144,6 +144,18 @@ def get_all_employee_names():
     return data
 
 
+def get_all_exemplars():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT id_exemplar, nome FROM Exemplar_Aluguel, Jogo ' +
+            'WHERE Jogo.id_jogo = Exemplar_Aluguel.id_jogo;'
+        )
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
+
 def validate_login(cpf, password):
     try:
         connection = Connection()
