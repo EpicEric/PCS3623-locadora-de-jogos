@@ -5,7 +5,8 @@ from .blueprints.games import games_blueprint
 from .blueprints.rooms import rooms_blueprint
 from .models.user import User
 import board_game_store.config as config
-from flask import Flask, render_template, redirect
+import os
+from flask import Flask, render_template, redirect, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 
 app = Flask(__name__)
@@ -41,6 +42,12 @@ def unauthorized_handler():
 @login_required
 def root_page():
     return render_template('main_page.html')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/success')

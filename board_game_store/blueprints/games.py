@@ -1,6 +1,7 @@
 from board_game_store.db.access import (
     add_exemplar, add_game, get_all_game_names, get_all_exemplars,
-    get_exemplar_info, get_exemplars_by_game, get_game_info
+    get_exemplar_info, get_exemplars_by_game, get_last_exemplar_id,
+    get_game_info
 )
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
@@ -24,8 +25,10 @@ class AddGameForm(FlaskForm):
 
 
 class AddExemplarForm(FlaskForm):
-    exemplar_id = IntegerField('Identificador', validators=[DataRequired(), NumberRange(min=1, max=40)])
+    exemplar_id = IntegerField('ID', validators=[DataRequired(), NumberRange(min=1, max=500)])
     game_name = SelectField('Jogo')
+    id = IntegerField('ID', validators=[NumberRange(min=1, max=500)])
+    game = StringField('Jogo')
 
 
 def error(message):
@@ -60,6 +63,8 @@ def add_exemplar_page():
             import traceback
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
         return redirect('success')
+    else:
+        form.exemplar_id.data = get_last_exemplar_id() + 1
     return render_template('games/add_exemplar.html', form=form)
 
 
@@ -94,7 +99,8 @@ def view_game_page():
     form.price_sell.data = float(game_tuple[6][1:])
     form.storage.data = game_tuple[7]
 
-    return render_template('games/view_game.html', form=form)
+    exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id)]
+    return render_template('games/view_game.html', form=form, exemplars=exemplars)
 
 
 @games_blueprint.route('/games/list-exemplars')
@@ -105,7 +111,8 @@ def list_exemplars_page():
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-    return render_template('games/list_exemplars.html', exemplar_list=exemplar_list)
+    form = AddExemplarForm()
+    return render_template('games/list_exemplars.html', exemplar_list=exemplar_list, form=form)
 
 
 @games_blueprint.route('/games/view-exemplar')
@@ -122,7 +129,7 @@ def view_exemplar_page():
 
     form = AddExemplarForm()
     form.exemplar_id.data = exemplar_id
-    form.game_name.choices = [(game_id, game_name)]
+    form.game.data = game_name
 
-    other_exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id)]
+    other_exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id) if str(x[0]) != str(exemplar_id)]
     return render_template('games/view_exemplar.html', form=form, other_exemplars=other_exemplars)

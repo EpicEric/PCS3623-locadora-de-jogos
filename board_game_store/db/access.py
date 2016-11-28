@@ -15,12 +15,12 @@ def add_client(cpf, name, surname, birthday):
 
 
 def add_game(game):
-    game_id = random.randint(-2 ** 31, 2 ** 31 - 1)
+    game_id = get_last_game_id() + 1
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
             'INSERT INTO Jogo VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);',
-            (game_id, game.name, game.producer, game.release_year, game.language,
+            (game_id, game.name, game.producer, game.release_year, game.language.lower(),
              game.players, game.price_rent, game.price_sell, game.storage)
         )
     connection.commit()
@@ -69,6 +69,22 @@ def add_reservation(room_id, start, end, client_cpf, employee_cpf):
         )
     connection.commit()
     connection.close()
+
+
+def validate_login(cpf, password):
+    try:
+        connection = Connection()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            )
+            data = cursor.fetchone()
+            connection.close()
+            if data is not None:
+                return check_password_hash(data[0], password)
+    except Exception as e:
+        return False
+    return False
 
 
 def get_all_client_names():
@@ -190,32 +206,27 @@ def get_exemplars_by_game(game_id):
     return data
 
 
+def get_last_exemplar_id():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT MAX(id_exemplar) FROM Exemplar_Aluguel;'
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data[0]
+
+
 def get_exemplar_info(exemplar_id):
     connection = Connection()
     with connection.cursor() as cursor:
         cursor.execute(
             'SELECT id_jogo FROM Exemplar_Aluguel ' +
-            'WHERE id_exemplar = %s;', (exemplar_id)
+            'WHERE id_exemplar = %s;' % (exemplar_id)
         )
         data = cursor.fetchall()
     connection.close()
     return data
-
-
-def validate_login(cpf, password):
-    try:
-        connection = Connection()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
-            )
-            data = cursor.fetchone()
-            connection.close()
-            if data is not None:
-                return check_password_hash(data[0], password)
-    except Exception as e:
-        return False
-    return False
 
 
 def get_employee_name_by_cpf(cpf):
@@ -239,3 +250,14 @@ def get_game_info(game_id):
         data = cursor.fetchone()
     connection.close()
     return data
+
+
+def get_last_game_id():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT MAX(id_jogo) FROM Jogo;'
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data[0]

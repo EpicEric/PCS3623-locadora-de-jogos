@@ -1,6 +1,15 @@
 {% extends "base_info.html" %}
 {% block title %}Seleção de Exemplar{% endblock %}
 {% block body %}
+<form class="pure-form" method="GET" action="/games/view-exemplar">
+    <fieldset>
+        <legend>Buscar exemplar</legend>
+        <center>
+            {{ form.id(size=20,placeholder=form.id.label.text) }}
+            <input type="submit" class="pure-button pure-button-primary" value="Buscar">
+        </center>
+    </fieldset>
+</form>
 <form class="pure-form pure-form-stacked">
     <fieldset>
         <legend>Selecionar exemplar</legend>
