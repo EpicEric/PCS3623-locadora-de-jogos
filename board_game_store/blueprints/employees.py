@@ -1,6 +1,6 @@
-from board_game_store.db.access import add_employee, get_all_employee_names
+from board_game_store.db.access import add_employee, get_all_employee_names, get_employee_info
 from board_game_store.models.employee import Employee
-from flask import Blueprint, flash, redirect, render_template
+from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
@@ -36,6 +36,7 @@ def add_games_page():
         return redirect('success')
     return render_template('employees/add_employee.html', form=form)
 
+
 @employees_blueprint.route('/employees/list-employees')
 @login_required
 def list_employees_page():
@@ -49,3 +50,28 @@ def list_employees_page():
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     form = AddEmployeeForm()
     return render_template('employees/list_employees.html', employee_list=employee_list, form=form)
+
+
+@employees_blueprint.route('/employees/view-employee')
+@login_required
+def view_client_page():
+    def error(message):
+        flash(message)
+        return redirect('/error')
+    try:
+        employee_cpf = request.args.get('cpf', '')
+        employee_tuple = get_employee_info(employee_cpf)
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+
+    form = AddEmployeeForm()
+
+    form.cpf.data = employee_tuple[0]
+    form.name.data = employee_tuple[1]
+    form.surname.data = employee_tuple[2]
+    form.role.data = employee_tuple[3]
+    form.salary.data = employee_tuple[4]
+    form.supervisor.data = employee_tuple[5]
+
+    return render_template('employees/view_employee.html', form=form)

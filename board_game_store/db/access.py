@@ -91,6 +91,17 @@ def get_client_info(cpf):
     return data
 
 
+def get_employee_info(cpf):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT cpf_funcionario, nome, sobrenome, funcao, salario, cpf_supervisor FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data
+
+
 def get_all_game_names():
     connection = Connection()
     with connection.cursor() as cursor:
