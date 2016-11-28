@@ -1,4 +1,7 @@
-from board_game_store.db.access import add_exemplar, add_game, get_all_game_names, get_all_exemplars, get_game_info
+from board_game_store.db.access import (
+    add_exemplar, add_game, get_all_game_names, get_all_exemplars,
+    get_exemplar_info, get_exemplars_by_game, get_game_info
+)
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -103,3 +106,23 @@ def list_exemplars_page():
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     return render_template('games/list_exemplars.html', exemplar_list=exemplar_list)
+
+
+@games_blueprint.route('/games/view-exemplar')
+@login_required
+def view_exemplar_page():
+    exemplar_id = request.args.get('id', '')
+    try:
+        exemplar_tuple = get_exemplar_info(exemplar_id)
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    game_id = exemplar_tuple[0]
+    game_name = get_game_info(game_id)[0]
+
+    form = AddExemplarForm()
+    form.exemplar_id.data = exemplar_id
+    form.game_name.choices = [(game_id, game_name)]
+
+    other_exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id)]
+    return render_template('games/view_exemplar.html', form=form, other_exemplars=other_exemplars)

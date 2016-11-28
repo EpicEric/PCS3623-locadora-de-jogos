@@ -178,6 +178,30 @@ def get_all_exemplars():
     return data
 
 
+def get_exemplars_by_game(game_id):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT id_exemplar FROM Exemplar_Aluguel ' +
+            'WHERE id_jogo = %s;', (game_id)
+        )
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
+
+def get_exemplar_info(exemplar_id):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT id_jogo FROM Exemplar_Aluguel ' +
+            'WHERE id_exemplar = %s;', (exemplar_id)
+        )
+        data = cursor.fetchall()
+    connection.close()
+    return data
+
+
 def validate_login(cpf, password):
     try:
         connection = Connection()
