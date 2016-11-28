@@ -203,3 +203,15 @@ def get_employee_name_by_cpf(cpf):
         data = cursor.fetchone()
     connection.close()
     return data
+
+
+def get_game_info(game_id):
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT nome,produtora,ano_lancamento,idioma,numero_jogadores,preco_aluguel,preco_compra,estoque_compra ' +
+            'FROM Jogo WHERE id_jogo = %s;' % (game_id)
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data

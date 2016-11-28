@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_exemplar, add_game, get_all_game_names, get_all_exemplars
+from board_game_store.db.access import add_exemplar, add_game, get_all_game_names, get_all_exemplars, get_game_info
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -69,6 +69,29 @@ def list_games_page():
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     return render_template('games/list_games.html', game_list=game_list)
+
+
+@games_blueprint.route('/games/view-game')
+@login_required
+def view_game_page():
+    game_id = request.args.get('id', '')
+    try:
+        game_tuple = get_game_info(game_id)
+    except Exception as e:
+        import traceback
+        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    form = AddGameForm()
+
+    form.name.data = game_tuple[0]
+    form.producer.data = game_tuple[1]
+    form.release_year.data = game_tuple[2]
+    form.language.data = game_tuple[3]
+    form.players.data = game_tuple[4]
+    form.price_rent.data = float(game_tuple[5][1:])  # money string to float
+    form.price_sell.data = float(game_tuple[6][1:])
+    form.storage.data = game_tuple[7]
+
+    return render_template('games/view_game.html', form=form)
 
 
 @games_blueprint.route('/games/list-exemplars')
