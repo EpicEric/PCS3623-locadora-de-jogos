@@ -1,5 +1,5 @@
 from board_game_store.db.access import add_client, get_all_client_names, get_client_info
-from flask import Blueprint, flash, redirect, render_template
+from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField
@@ -51,22 +51,23 @@ def list_clients_page():
     return render_template('clients/list_clients.html', client_list=client_list, form=form)
 
 
-@clients_blueprint.route('/clients/view-client?cpf=<client_cpf>')
+@clients_blueprint.route('/clients/view-client')
 @login_required
-def view_client_page(client_cpf):
+def view_client_page():
     def error(message):
         flash(message)
         return redirect('/error')
     try:
+        client_cpf = request.args.get('cpf', '')
         client_tuple = get_client_info(client_cpf)
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
     form = AddClientForm()
 
-    form.cpf = client_tuple[0]
-    form.name = client_tuple[1]
-    form.surname = client_tuple[2]
-    form.birthday = client_tuple[3]
+    form.cpf.data = client_tuple[0]
+    form.name.data = client_tuple[1]
+    form.surname.data = client_tuple[2]
+    form.birthday.data = client_tuple[3]
 
     return render_template('clients/view_client.html', form=form)
