@@ -16,6 +16,12 @@ class AddClientForm(FlaskForm):
     birthday = DateField('Aniversário', validators=[DataRequired()])
 
 
+@clients_blueprint.route('/clients')
+@login_required
+def default_clients_page():
+    return redirect("/clients/list-clients")
+
+
 @clients_blueprint.route('/clients/add-client', methods=['GET', 'POST'])
 @login_required
 def add_client_page():

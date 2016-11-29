@@ -19,6 +19,12 @@ class AddEmployeeForm(FlaskForm):
     supervisor = StringField('CPF do supervisor', validators=[DataRequired()])
 
 
+@employees_blueprint.route('/employees')
+@login_required
+def default_employees_page():
+    return redirect("/employees/list-employees")
+
+
 @employees_blueprint.route('/employees/add-employee', methods=['GET', 'POST'])
 @login_required
 def add_games_page():

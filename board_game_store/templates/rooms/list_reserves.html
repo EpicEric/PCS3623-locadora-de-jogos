@@ -1,0 +1,32 @@
+{% extends "base_info.html" %}
+{% block title %}Seleção de Reserva{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Selecionar reserva</legend>
+        <center>
+            <table class="pure-table pure-table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sala</th>
+                        <th>Horário de início</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for item in reserve_list %}
+                    <tr{{ loop.cycle(' class=pure-table-odd', '') }}>
+                        <td align="center" valign="middle">
+                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
+                        </td>
+                        <td align="center" valign="middle">
+                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[1] }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </center>
+    </fieldset>
+</form>
+{% endblock %}

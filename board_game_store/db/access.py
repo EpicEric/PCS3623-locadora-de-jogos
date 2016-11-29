@@ -202,6 +202,10 @@ def get_all_rooms():
     return fetch_all('SELECT numero, lugares FROM Sala;')
 
 
+def get_all_reserves():
+    return fetch_all('SELECT num_sala, horario_inicio FROM Reserva_Sala;')
+
+
 def get_free_rooms(seats, time):
     connection = Connection()
     with connection.cursor() as cursor:
@@ -265,6 +269,18 @@ def get_game_info(game_id):
     return fetch_one(
         'SELECT nome,produtora,ano_lancamento,idioma,numero_jogadores,preco_aluguel,preco_compra,estoque_compra ' +
         'FROM Jogo WHERE id_jogo = %s;', (game_id,)
+    )
+
+
+def get_all_rentals():
+    return fetch_all(
+        'SELECT id_aluguel, horario FROM Aluguel ORDER BY horario DESC;'
+    )
+
+
+def get_all_purchases():
+    return fetch_all(
+        'SELECT id_compra, horario FROM Compra ORDER BY horario DESC;'
     )
 
 

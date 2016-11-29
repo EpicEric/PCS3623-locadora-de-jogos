@@ -8,19 +8,19 @@
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item"><a href="/" class="pure-menu-link">Menu principal</a></li>
                     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                        <a href="#" id="menuLink1" class="pure-menu-link">Cliente</a>
+                        <a href="/clients" id="menuLink1" class="pure-menu-link">Cliente</a>
                         <ul class="pure-menu-children">
                             <li class="pure-menu-item"><a href="/clients/list-clients" class="pure-menu-link">Consultar cliente</a></li>
                             <li class="pure-menu-item"><a href="/clients/add-client" class="pure-menu-link">Cadastrar novo cliente</a></li>
                         </ul>
                     </li>
                     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                        <a href="#" id="menuLink1" class="pure-menu-link">Jogos</a>
+                        <a href="/games" id="menuLink1" class="pure-menu-link">Jogos</a>
                         <ul class="pure-menu-children">
                             <li class="pure-menu-item"><a href="/games/add-rental" class="pure-menu-link">Alugar jogos</a></li>
                             <li class="pure-menu-item"><a href="/games/add-purchase" class="pure-menu-link">Vender jogos</a></li>
-                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar aluguel</a></li>
-                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Consultar venda</a></li>
+                            <li class="pure-menu-item"><a href="/games/list-rentals" class="pure-menu-link">Consultar aluguel</a></li>
+                            <li class="pure-menu-item"><a href="/games/list-purchases" class="pure-menu-link">Consultar venda</a></li>
                             <li class="pure-menu-item"><a href="/games/list-exemplars" class="pure-menu-link">Consultar exemplar</a></li>
                             <li class="pure-menu-item"><a href="/games/list-games" class="pure-menu-link">Consultar jogo</a></li>
                             <li class="pure-menu-item"><a href="/games/add-exemplar" class="pure-menu-link">Cadastrar novo exemplar</a></li>
@@ -28,15 +28,16 @@
                         </ul>
                     </li>
                     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                        <a href="#" id="menuLink1" class="pure-menu-link">Salas</a>
+                        <a href="/rooms" id="menuLink1" class="pure-menu-link">Salas</a>
                         <ul class="pure-menu-children">
                             <li class="pure-menu-item"><a href="/rooms/reserve-room" class="pure-menu-link">Reservar sala</a></li>
+                            <li class="pure-menu-item"><a href="/rooms/list-reserves" class="pure-menu-link">Consultar reserva</a></li>
                             <li class="pure-menu-item"><a href="/rooms/list-rooms" class="pure-menu-link">Consultar sala</a></li>
                             <li class="pure-menu-item"><a href="/rooms/add-room" class="pure-menu-link">Cadastrar nova sala</a></li>
                         </ul>
                     </li>
                     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                        <a href="#" id="menuLink1" class="pure-menu-link">Funcionários</a>
+                        <a href="/employees" id="menuLink1" class="pure-menu-link">Funcionários</a>
                         <ul class="pure-menu-children">
                             <li class="pure-menu-item"><a href="/employees/list-employees" class="pure-menu-link">Consultar funcionário</a></li>
                             <li class="pure-menu-item"><a href="/employees/add-employee" class="pure-menu-link">Cadastrar novo funcionário</a></li>
@@ -47,7 +48,7 @@
             <div class="pure-menu custom-menu pure-menu-horizontal">
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                        <a href="#" id="menuLink1" class="pure-menu-link">{{ current_user.name }}</a>
+                        <a href="/employees/view-employee?cpf={{ current_user.get_id() }}" id="menuLink1" class="pure-menu-link">{{ current_user.name }}</a>
                         <ul class="pure-menu-children">
                             <li class="pure-menu-item"><a href="/logout" class="pure-menu-link">Sair</a></li>
                         </ul>

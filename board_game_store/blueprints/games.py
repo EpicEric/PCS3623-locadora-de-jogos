@@ -1,7 +1,7 @@
 from board_game_store.db.access import (
     add_exemplar, add_game, add_rental, add_purchase, get_all_game_names,
     get_all_exemplars, get_exemplar_info, get_exemplars_by_game,
-    get_last_exemplar_id, get_game_info
+    get_last_exemplar_id, get_game_info, get_all_rentals, get_all_purchases
 )
 from datetime import datetime
 from board_game_store.models.game import Game
@@ -53,6 +53,12 @@ class AddExemplarForm(FlaskForm):
 def error(message):
     flash(message)
     return redirect('/error')
+
+
+@games_blueprint.route('/games')
+@login_required
+def default_games_page():
+    return redirect("/games/list-games")
 
 
 @games_blueprint.route('/games/add-rental', methods=['GET', 'POST'])
@@ -181,3 +187,31 @@ def view_exemplar_page():
 
     other_exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id) if str(x[0]) != str(exemplar_id)]
     return render_template('games/view_exemplar.html', form=form, other_exemplars=other_exemplars)
+
+
+@games_blueprint.route('/games/list-rentals')
+@login_required
+def list_rentals_page():
+    rental_list = get_all_rentals()
+    return render_template('games/list_rentals.html', rental_list=rental_list)
+
+
+@games_blueprint.route('/games/list-purchases')
+@login_required
+def list_purchases_page():
+    purchase_list = get_all_purchases()
+    return render_template('games/list_purchases.html', purchase_list=purchase_list)
+
+
+@games_blueprint.route('/games/view-rental')
+@login_required
+def view_rental_page():
+    # TODO
+    return redirect("/")
+
+
+@games_blueprint.route('/games/view-purchase')
+@login_required
+def view_purchase_page():
+    # TODO
+    return redirect("/")

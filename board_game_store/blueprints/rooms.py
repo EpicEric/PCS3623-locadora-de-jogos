@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_reservation, add_room, get_all_rooms, get_free_rooms, get_room_info
+from board_game_store.db.access import add_reservation, add_room, get_all_rooms, get_free_rooms, get_room_info, get_all_reserves
 from datetime import datetime
 from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -22,6 +22,12 @@ class ViewRoomForm(FlaskForm):
     room = SelectField('Salas disponíveis')
     end_time = StringField('Horário de fim')
     client_cpf = StringField('CPF do cliente')
+
+
+@rooms_blueprint.route('/rooms')
+@login_required
+def default_rooms_page():
+    return redirect("/rooms/list-rooms")
 
 
 @rooms_blueprint.route('/rooms/add-room', methods=['GET', 'POST'])
@@ -74,3 +80,16 @@ def reserve_room_page():
             ]
             return render_template('rooms/reserve_room.html', form=form)
     return render_template('rooms/reserve_room.html', form=form)
+
+
+@rooms_blueprint.route('/rooms/list-reserves')
+@login_required
+def list_reserves_page():
+    reserve_list = get_all_reserves()
+    return render_template('rooms/list_reserves.html', reserve_list=reserve_list)
+
+@rooms_blueprint.route('/rooms/view-reserve')
+@login_required
+def view_reserve_page():
+    # TODO
+    return redirect("/")
