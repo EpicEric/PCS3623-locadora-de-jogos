@@ -3,11 +3,11 @@ from .blueprints.clients import clients_blueprint
 from .blueprints.employees import employees_blueprint
 from .blueprints.games import games_blueprint
 from .blueprints.rooms import rooms_blueprint
+from .db.access import NoDBElementError
 from .models.user import User
 import board_game_store.config as config
-import os
-from flask import Flask, render_template, redirect, send_from_directory
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask import flash, Flask, render_template, redirect
+from flask_login import LoginManager, login_required
 
 app = Flask(__name__)
 config.load(app)
@@ -25,13 +25,15 @@ app.register_blueprint(rooms_blueprint)
 def user_loader(cpf):
     return User(cpf)
 
-#@login_manager.request_loader
-#def request_loader(request):
-#    cpf = request.form.cpf.data
-#    password = request.form.password.data
-#    user = User(cpf)
-#    user.is_authenticated = validate_login(cpf, password)
-#    return user
+
+# @login_manager.request_loader
+# def request_loader(request):
+#     cpf = request.form.cpf.data
+#     password = request.form.password.data
+#     user = User(cpf)
+#     user.is_authenticated = validate_login(cpf, password)
+#     return user
+
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
@@ -44,12 +46,6 @@ def root_page():
     return render_template('main_page.html')
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-
 @app.route('/success')
 def success_page():
     return render_template('success.html')
@@ -57,4 +53,18 @@ def success_page():
 
 @app.route('/error')
 def error_page():
-    return render_template('error.html')
+    return render_template('error.html'), 400
+
+
+@app.errorhandler(NoDBElementError)
+def handle_db_error(error):
+    import traceback
+    flash('Erro no banco de dados: {}\n{}'.format(error, traceback.format_exc()))
+    return redirect('/error')
+
+
+@app.errorhandler(RuntimeError)
+def handle_runtime_error(error):
+    import traceback
+    flash('Erro: {}\n{}'.format(error, traceback.format_exc()))
+    return redirect('/error')

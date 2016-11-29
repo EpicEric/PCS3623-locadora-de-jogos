@@ -1,5 +1,5 @@
 from board_game_store.db.access import add_client, get_all_client_names, get_client_info
-from flask import Blueprint, flash, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField
@@ -19,19 +19,12 @@ class AddClientForm(FlaskForm):
 @clients_blueprint.route('/clients/add-client', methods=['GET', 'POST'])
 @login_required
 def add_client_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
     form = AddClientForm()
     if form.validate_on_submit():
         cpf = form.cpf.data
         if len(cpf) != 11 or any(x < '0' or x > '9' for x in cpf):
-            return error('CPF deve possuir 11 dígitos numéricos')
-        try:
-            add_client(form.cpf.data, form.name.data, form.surname.data, form.birthday.data)
-        except Exception as e:
-            import traceback
-            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+            raise RuntimeError('CPF deve possuir 11 dígitos numéricos')
+        add_client(form.cpf.data, form.name.data, form.surname.data, form.birthday.data)
         return redirect('success')
     return render_template('clients/add_client.html', form=form)
 
@@ -39,14 +32,7 @@ def add_client_page():
 @clients_blueprint.route('/clients/list-clients')
 @login_required
 def list_clients_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
-    try:
-        client_list = get_all_client_names()
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    client_list = get_all_client_names()
     form = AddClientForm()
     return render_template('clients/list_clients.html', client_list=client_list, form=form)
 
@@ -54,15 +40,8 @@ def list_clients_page():
 @clients_blueprint.route('/clients/view-client')
 @login_required
 def view_client_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
-    try:
-        client_cpf = request.args.get('cpf', '')
-        client_tuple = get_client_info(client_cpf)
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    client_cpf = request.args.get('cpf', '')
+    client_tuple = get_client_info(client_cpf)
     form = AddClientForm()
 
     form.cpf.data = client_tuple[0]

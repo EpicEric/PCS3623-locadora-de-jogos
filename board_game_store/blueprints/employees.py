@@ -1,6 +1,6 @@
 from board_game_store.db.access import add_employee, get_all_employee_names, get_employee_info
 from board_game_store.models.employee import Employee
-from flask import Blueprint, flash, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
@@ -22,17 +22,10 @@ class AddEmployeeForm(FlaskForm):
 @employees_blueprint.route('/employees/add-employee', methods=['GET', 'POST'])
 @login_required
 def add_games_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
     form = AddEmployeeForm()
     if form.validate_on_submit():
-        try:
-            add_employee(Employee(form.cpf.data, form.password.data, form.name.data, form.surname.data,
-                                  form.role.data, form.salary.data, form.supervisor.data))
-        except Exception as e:
-            import traceback
-            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        add_employee(Employee(form.cpf.data, form.password.data, form.name.data, form.surname.data,
+                              form.role.data, form.salary.data, form.supervisor.data))
         return redirect('success')
     return render_template('employees/add_employee.html', form=form)
 
@@ -40,14 +33,7 @@ def add_games_page():
 @employees_blueprint.route('/employees/list-employees')
 @login_required
 def list_employees_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
-    try:
-        employee_list = get_all_employee_names()
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    employee_list = get_all_employee_names()
     form = AddEmployeeForm()
     return render_template('employees/list_employees.html', employee_list=employee_list, form=form)
 
@@ -55,15 +41,8 @@ def list_employees_page():
 @employees_blueprint.route('/employees/view-employee')
 @login_required
 def view_client_page():
-    def error(message):
-        flash(message)
-        return redirect('/error')
-    try:
-        employee_cpf = request.args.get('cpf', '')
-        employee_tuple = get_employee_info(employee_cpf)
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    employee_cpf = request.args.get('cpf', '')
+    employee_tuple = get_employee_info(employee_cpf)
 
     form = AddEmployeeForm()
 

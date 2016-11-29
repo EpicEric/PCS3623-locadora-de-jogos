@@ -41,12 +41,8 @@ def error(message):
 def add_games_page():
     form = AddGameForm()
     if form.validate_on_submit():
-        try:
-            add_game(Game(form.name.data, form.producer.data, form.release_year.data, form.language.data,
-                          form.players.data, form.price_rent.data, form.price_sell.data, form.storage.data))
-        except Exception as e:
-            import traceback
-            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        add_game(Game(form.name.data, form.producer.data, form.release_year.data, form.language.data,
+                      form.players.data, form.price_rent.data, form.price_sell.data, form.storage.data))
         return redirect('success')
     return render_template('games/add_game.html', form=form)
 
@@ -57,11 +53,7 @@ def add_exemplar_page():
     form = AddExemplarForm()
     form.game_name.choices = get_all_game_names()
     if request.method == 'POST':
-        try:
-            add_exemplar(form.exemplar_id.data, form.game_name.data)
-        except Exception as e:
-            import traceback
-            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        add_exemplar(form.exemplar_id.data, form.game_name.data)
         return redirect('success')
     else:
         form.exemplar_id.data = get_last_exemplar_id() + 1
@@ -71,11 +63,7 @@ def add_exemplar_page():
 @games_blueprint.route('/games/list-games')
 @login_required
 def list_games_page():
-    try:
-        game_list = get_all_game_names()
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    game_list = get_all_game_names()
     return render_template('games/list_games.html', game_list=game_list)
 
 
@@ -83,11 +71,7 @@ def list_games_page():
 @login_required
 def view_game_page():
     game_id = request.args.get('id', '')
-    try:
-        game_tuple = get_game_info(game_id)
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    game_tuple = get_game_info(game_id)
     form = AddGameForm()
 
     form.name.data = game_tuple[0]
@@ -106,11 +90,7 @@ def view_game_page():
 @games_blueprint.route('/games/list-exemplars')
 @login_required
 def list_exemplars_page():
-    try:
-        exemplar_list = [(x[0], '{} - {}'.format(x[0], x[1])) for x in get_all_exemplars()]
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    exemplar_list = [(x[0], '{} - {}'.format(x[0], x[1])) for x in get_all_exemplars()]
     form = AddExemplarForm()
     return render_template('games/list_exemplars.html', exemplar_list=exemplar_list, form=form)
 
@@ -119,11 +99,7 @@ def list_exemplars_page():
 @login_required
 def view_exemplar_page():
     exemplar_id = request.args.get('id', '')
-    try:
-        exemplar_tuple = get_exemplar_info(exemplar_id)
-    except Exception as e:
-        import traceback
-        return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+    exemplar_tuple = get_exemplar_info(exemplar_id)
     game_id = exemplar_tuple[0]
     game_name = get_game_info(game_id)[0]
 
