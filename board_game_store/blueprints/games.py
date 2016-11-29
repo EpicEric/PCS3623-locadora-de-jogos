@@ -1,13 +1,13 @@
 from board_game_store.db.access import (
-    add_exemplar, add_game, add_rental, get_all_game_names, get_all_exemplars,
-    get_exemplar_info, get_exemplars_by_game, get_last_exemplar_id,
-    get_game_info
+    add_exemplar, add_game, add_rental, add_purchase, get_all_game_names,
+    get_all_exemplars, get_exemplar_info, get_exemplars_by_game,
+    get_last_exemplar_id, get_game_info
 )
 from datetime import datetime
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, IntegerField, SelectField, StringField, FieldList, SubmitField
+from wtforms import DecimalField, IntegerField, SelectField, StringField, FieldList, FormField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 from flask_login import current_user, login_required
 
@@ -19,6 +19,17 @@ class AddRentalForm(FlaskForm):
     exemplars = FieldList(SelectField('Exemplar', coerce=int, validators=[DataRequired()]), min_entries=1)
     add_exemplar = SubmitField('Adicionar exemplar')
     remove_exemplar = SubmitField('Remover exemplar')
+
+
+class ItemCompraForm(FlaskForm):
+    game = SelectField('Jogo', coerce=int, validators=[DataRequired()])
+    quantity = IntegerField('Quantidade', validators=[DataRequired(), NumberRange(min=1, max=100)])
+
+class AddPurchaseForm(FlaskForm):
+    client_cpf = StringField('CPF do cliente', validators=[DataRequired()])
+    games = FieldList(FormField(ItemCompraForm), min_entries=1)
+    add_game = SubmitField('Adicionar jogo')
+    remove_game = SubmitField('Remover jogo')
 
 
 class AddGameForm(FlaskForm):
@@ -57,16 +68,45 @@ def add_rental_page():
     elif form.remove_exemplar.data and len(form.exemplars.entries) > form.exemplars.min_entries:
         form.exemplars.pop_entry()
     elif form.validate_on_submit():
-            try:
-                rented_exemplars = list(set([x.data for x in form.exemplars.entries]))
-                add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars)
-            except Exception as e:
-                import traceback
-                return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-            return redirect('success')
+        try:
+            rented_exemplars = list(set([x.data for x in form.exemplars.entries]))
+            add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars)
+        except Exception as e:
+            import traceback
+            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        return redirect('success')
 
     return render_template('games/add_rental.html', form=form)
 
+
+@games_blueprint.route('/games/add-purchase', methods=['GET', 'POST'])
+@login_required
+def add_purchase_page():
+    form = AddPurchaseForm()
+    list_games = get_all_game_names()
+    for select in form.games.entries:
+        select.game.choices = list_games
+    if form.add_game.data:
+        form.games.append_entry()
+        form.games.entries[-1].game.choices = list_games
+    elif form.remove_game.data and len(form.games.entries) > form.games.min_entries:
+        form.games.pop_entry()
+    elif form.validate_on_submit():
+        try:
+            dict = {}
+            for x in form.games.entries:
+                if x.game.data in dict:
+                    dict[x.game.data] += x.quantity.data
+                else:
+                    dict[x.game.data] = x.quantity.data
+            purchased_games = dict.items()
+            add_purchase(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), purchased_games)
+        except Exception as e:
+            import traceback
+            return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
+        return redirect('success')
+
+    return render_template('games/add_purchase.html', form=form)
 
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
 @login_required

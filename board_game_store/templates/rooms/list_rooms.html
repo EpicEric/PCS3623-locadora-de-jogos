@@ -15,12 +15,12 @@
 
                 <tbody>
                 {% for item in room_list %}
-                    <tr>
+                    <tr{{ loop.cycle(' class=pure-table-odd', '') }}>
                         <td align="center" valign="middle">
                             <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
                         </td>
                         <td align="center" valign="middle">
-                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[1] }}</a>
+                            {{ item[1] }}
                         </td>
                     </tr>
                 {% endfor %}

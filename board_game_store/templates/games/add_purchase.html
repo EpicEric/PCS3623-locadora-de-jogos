@@ -1,0 +1,32 @@
+{% extends "base_form.html" %}
+{% block title %}Cadastro de Compra{% endblock %}
+{% block body %}
+<form class="pure-form pure-form-aligned" method="POST" action="/games/add-purchase">
+    <fieldset>
+        <legend>Cadastrar nova compra</legend>
+        {{ form.csrf_token }}
+        <div class="pure-control-group">
+            {{ form.client_cpf.label }} {{ form.client_cpf(size=20) }}
+        </div>
+
+        {% for e in form.games %}
+        {{ e.csrf_token }}
+        <div class="pure-control-group">
+            {{ e.game.label }} {{ e.game }}
+        </div>
+        <div class="pure-control-group">
+            {{ e.quantity.label }} {{ e.quantity }}
+        </div>
+        {% endfor %}
+
+        <div class="pure-controls">
+            {{ form.add_game(class="pure-button button-success") }}
+            {{ form.remove_game(class="pure-button button-error") }}
+        </div>
+
+        <div class="pure-controls">
+            <input type="submit" class="pure-button pure-button-primary" value="Cadastrar">
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

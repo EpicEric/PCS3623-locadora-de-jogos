@@ -6,6 +6,10 @@ class NoDBElementError(RuntimeError):
     pass
 
 
+class InvalidParameterError(RuntimeError):
+    pass
+
+
 def add_client(cpf, name, surname, birthday):
     connection = Connection()
     with connection.cursor() as cursor:
@@ -87,6 +91,37 @@ def add_rental(client_cpf, employee_cpf, time, exemplars):
         cursor.executemany(
             'INSERT INTO Item_Aluguel VALUES (%s, %s);',
             (exemplars_data)
+        )
+    connection.commit()
+    connection.close()
+
+
+def add_purchase(client_cpf, employee_cpf, time, games):
+    purchase_id = get_last_purchase_id() + 1
+    games_data = [(purchase_id, g[0], g[1]) for g in games]
+    stock_data = [(g[1], g[0]) for g in games]
+
+    for g in games:
+        stock = fetch_one(
+            'SELECT estoque_compra FROM Jogo WHERE id_jogo = %s;',
+            (str(g[0]))
+        )[0]
+        if g[1] > stock:
+            raise InvalidParameterError("Jogo de ID " + str(g[0]) + " possui apenas " + str(stock) + " item(ns) em estoque")
+
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Compra VALUES (%s, %s, %s, %s);',
+            (purchase_id, client_cpf, employee_cpf, time)
+        )
+        cursor.executemany(
+            'UPDATE Jogo SET estoque_compra = estoque_compra-%s WHERE id_jogo = %s;',
+            (stock_data)
+        )
+        cursor.executemany(
+            'INSERT INTO Item_Compra VALUES (%s, %s, %s);',
+            (games_data)
         )
     connection.commit()
     connection.close()
@@ -237,3 +272,7 @@ def get_last_game_id():
 
 def get_last_rental_id():
     return fetch_one('SELECT MAX(id_aluguel) FROM Aluguel;', None)[0]
+
+
+def get_last_purchase_id():
+    return fetch_one('SELECT MAX(id_compra) FROM Compra;', None)[0]
