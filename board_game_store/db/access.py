@@ -152,14 +152,16 @@ def fetch_all(*args):
         return data
 
 
-def fetch_one(query, params):
+def fetch_one(*args):
     connection = Connection()
     with connection.cursor() as cursor:
-        cursor.execute(query, params)
+        cursor.execute(*args)
         data = cursor.fetchone()
     connection.close()
     if not data:
-        raise NoDBElementError('Dado {} não encontrado'.format(params,))
+        if len(args) == 2:
+            raise NoDBElementError('Dado {} não encontrado'.format(args[1]))
+        raise NoDBElementError('Dado não encontrado em query {}'.format(args))
     return data
 
 
@@ -243,7 +245,7 @@ def get_exemplars_by_game(game_id):
 
 
 def get_last_exemplar_id():
-    return fetch_one('SELECT MAX(id_exemplar) FROM Exemplar_Aluguel;', None)[0]
+    return fetch_one('SELECT MAX(id_exemplar) FROM Exemplar_Aluguel;')[0]
 
 
 def get_exemplar_info(exemplar_id):
@@ -267,12 +269,12 @@ def get_game_info(game_id):
 
 
 def get_last_game_id():
-    return fetch_one('SELECT MAX(id_jogo) FROM Jogo;', None)[0]
+    return fetch_one('SELECT MAX(id_jogo) FROM Jogo;')[0]
 
 
 def get_last_rental_id():
-    return fetch_one('SELECT MAX(id_aluguel) FROM Aluguel;', None)[0]
+    return fetch_one('SELECT MAX(id_aluguel) FROM Aluguel;')[0]
 
 
 def get_last_purchase_id():
-    return fetch_one('SELECT MAX(id_compra) FROM Compra;', None)[0]
+    return fetch_one('SELECT MAX(id_compra) FROM Compra;')[0]
