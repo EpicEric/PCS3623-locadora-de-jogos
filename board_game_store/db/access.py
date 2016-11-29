@@ -71,6 +71,24 @@ def add_reservation(room_id, start, end, client_cpf, employee_cpf):
     connection.close()
 
 
+def add_rental(client_cpf, employee_cpf, time, exemplars):
+    rental_id = get_last_rental_id() + 1
+    exemplars_data = [(rental_id, e) for e in exemplars]
+
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Aluguel VALUES (%s, %s, %s, %s);',
+            (rental_id, client_cpf, employee_cpf, time)
+        )
+        cursor.executemany(
+            'INSERT INTO Item_Aluguel VALUES (%s, %s);',
+            (exemplars_data)
+        )
+    connection.commit()
+    connection.close()
+
+
 def validate_login(cpf, password):
     try:
         connection = Connection()
@@ -269,6 +287,17 @@ def get_last_game_id():
     with connection.cursor() as cursor:
         cursor.execute(
             'SELECT MAX(id_jogo) FROM Jogo;'
+        )
+        data = cursor.fetchone()
+    connection.close()
+    return data[0]
+
+
+def get_last_rental_id():
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT MAX(id_aluguel) FROM Aluguel;'
         )
         data = cursor.fetchone()
     connection.close()
