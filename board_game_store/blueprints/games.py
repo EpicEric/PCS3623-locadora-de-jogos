@@ -1,13 +1,14 @@
 from board_game_store.db.access import (
     add_exemplar, add_game, add_rental, add_purchase, get_all_game_names,
     get_all_exemplars, get_exemplar_info, get_exemplars_by_game,
-    get_last_exemplar_id, get_game_info, get_all_rentals, get_all_purchases
+    get_last_exemplar_id, get_game_info, get_rental_info, get_purchase_info,
+    get_rental_value, get_purchase_value, get_all_rentals, get_all_purchases
 )
 from datetime import datetime
 from board_game_store.models.game import Game
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, IntegerField, SelectField, StringField, FieldList, FormField, SubmitField
+from wtforms import DecimalField, IntegerField, SelectField, StringField, FieldList, FormField, SubmitField, DateTimeField
 from wtforms.validators import DataRequired, NumberRange
 from flask_login import current_user, login_required
 
@@ -50,6 +51,14 @@ class AddExemplarForm(FlaskForm):
     game = StringField('Jogo')
 
 
+class AddTransactionViewForm(FlaskForm):
+    id = StringField('ID', validators=[DataRequired()])
+    client_cpf = StringField('CPF do cliente', validators=[DataRequired()])
+    employee_cpf = StringField('CPF do funcionário', validators=[DataRequired()])
+    time = DateTimeField('Horário', validators=[DataRequired()])
+    value = StringField('Valor total', validators=[DataRequired()])
+
+
 def error(message):
     flash(message)
     return redirect('/error')
@@ -76,7 +85,8 @@ def add_rental_page():
     elif form.validate_on_submit():
         try:
             rented_exemplars = list(set([x.data for x in form.exemplars.entries]))
-            add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars)
+            value = get_rental_value(rented_exemplars)
+            add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars, value)
         except Exception as e:
             import traceback
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
@@ -106,7 +116,8 @@ def add_purchase_page():
                 else:
                     dict[x.game.data] = x.quantity.data
             purchased_games = dict.items()
-            add_purchase(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), purchased_games)
+            value = get_purchase_value(purchased_games)
+            add_purchase(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), purchased_games, value)
         except Exception as e:
             import traceback
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
@@ -206,12 +217,26 @@ def list_purchases_page():
 @games_blueprint.route('/games/view-rental')
 @login_required
 def view_rental_page():
-    # TODO
-    return redirect("/")
+    rental_id = request.args.get('id', '')
+    rental_tuple = get_rental_info(rental_id)
+    form = AddTransactionViewForm()
+    form.id.data = rental_tuple[0]
+    form.client_cpf.data = rental_tuple[1]
+    form.employee_cpf.data = rental_tuple[2]
+    form.time.data = rental_tuple[3]
+    form.value.data = rental_tuple[4]
+    return render_template('games/view_rental.html', form=form)
 
 
 @games_blueprint.route('/games/view-purchase')
 @login_required
 def view_purchase_page():
-    # TODO
-    return redirect("/")
+    purchase_id = request.args.get('id', '')
+    purchase_tuple = get_purchase_info(purchase_id)
+    form = AddTransactionViewForm()
+    form.id.data = purchase_tuple[0]
+    form.client_cpf.data = purchase_tuple[1]
+    form.employee_cpf.data = purchase_tuple[2]
+    form.time.data = purchase_tuple[3]
+    form.value.data = purchase_tuple[4]
+    return render_template('games/view_purchase.html', form=form)

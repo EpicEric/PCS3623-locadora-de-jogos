@@ -87,9 +87,3 @@ def reserve_room_page():
 def list_reserves_page():
     reserve_list = get_all_reserves()
     return render_template('rooms/list_reserves.html', reserve_list=reserve_list)
-
-@rooms_blueprint.route('/rooms/view-reserve')
-@login_required
-def view_reserve_page():
-    # TODO
-    return redirect("/")
