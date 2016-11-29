@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_reservation, add_room, get_all_room_numbers, get_free_rooms, get_room_info
+from board_game_store.db.access import add_reservation, add_room, get_all_rooms, get_free_rooms, get_room_info
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -48,7 +48,7 @@ def list_rooms_page():
         flash(message)
         return redirect('/error')
     try:
-        room_list = get_all_room_numbers()
+        room_list = get_all_rooms()
     except Exception as e:
         import traceback
         return error('Erro no banco de dados: {}'.format(traceback.format_exc()))

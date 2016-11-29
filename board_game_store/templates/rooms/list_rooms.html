@@ -5,13 +5,27 @@
     <fieldset>
         <legend>Selecionar sala</legend>
         <center>
-            <div class="pure-g">
+            <table class="pure-table pure-table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nº da Sala</th>
+                        <th>Lugares</th>
+                    </tr>
+                </thead>
+
+                <tbody>
                 {% for item in room_list %}
-                    <div class="pure-u-1 pure-u-md-1-3">
-                        <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
-                    </div>
+                    <tr>
+                        <td align="center" valign="middle">
+                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
+                        </td>
+                        <td align="center" valign="middle">
+                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[1] }}</a>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </div>
+                </tbody>
+            </table>
         </center>
     </fieldset>
 </form>

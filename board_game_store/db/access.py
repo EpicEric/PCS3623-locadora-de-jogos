@@ -139,10 +139,10 @@ def get_all_game_names():
     return data
 
 
-def get_all_room_numbers():
+def get_all_rooms():
     connection = Connection()
     with connection.cursor() as cursor:
-        cursor.execute('SELECT numero FROM Sala;')
+        cursor.execute('SELECT numero, lugares FROM Sala;')
         data = cursor.fetchall()
     connection.close()
     return data
