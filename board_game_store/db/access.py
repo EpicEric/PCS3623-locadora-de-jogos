@@ -74,6 +74,40 @@ def add_reservation(room_id, start, end, client_cpf, employee_cpf):
     connection.close()
 
 
+def add_rental(client_cpf, employee_cpf, time, exemplars):
+    rental_id = get_last_rental_id() + 1
+    exemplars_data = [(rental_id, e) for e in exemplars]
+
+    connection = Connection()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'INSERT INTO Aluguel VALUES (%s, %s, %s, %s);',
+            (rental_id, client_cpf, employee_cpf, time)
+        )
+        cursor.executemany(
+            'INSERT INTO Item_Aluguel VALUES (%s, %s);',
+            (exemplars_data)
+        )
+    connection.commit()
+    connection.close()
+
+
+def validate_login(cpf, password):
+    try:
+        connection = Connection()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
+            )
+            data = cursor.fetchone()
+            connection.close()
+            if data is not None:
+                return check_password_hash(data[0], password)
+    except Exception as e:
+        return False
+    return False
+
+
 def fetch_all(*args):
     connection = Connection()
     with connection.cursor() as cursor:
@@ -174,7 +208,7 @@ def get_exemplars_by_game(game_id):
 
 
 def get_last_exemplar_id():
-    return fetch_one('SELECT MAX(id_exemplar) FROM Exemplar_Aluguel;')[0]
+    return fetch_one('SELECT MAX(id_exemplar) FROM Exemplar_Aluguel;', None)[0]
 
 
 def get_exemplar_info(exemplar_id):
@@ -198,4 +232,8 @@ def get_game_info(game_id):
 
 
 def get_last_game_id():
-    return fetch_one('SELECT MAX(id_jogo) FROM Jogo;')[0]
+    return fetch_one('SELECT MAX(id_jogo) FROM Jogo;', None)[0]
+
+
+def get_last_rental_id():
+    return fetch_one('SELECT MAX(id_aluguel) FROM Aluguel;', None)[0]
