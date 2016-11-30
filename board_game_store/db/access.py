@@ -216,7 +216,11 @@ def get_employee_info(cpf):
 
 
 def get_all_game_names():
-    return fetch_all('SELECT id_jogo,nome FROM Jogo ORDER BY nome;')
+    return fetch_all('SELECT id_jogo, nome FROM Jogo ORDER BY nome;')
+
+
+def get_all_game_prices():
+    return fetch_all('SELECT id_jogo, nome, preco_compra FROM Jogo ORDER BY nome;')
 
 
 def get_all_rooms():
@@ -251,9 +255,16 @@ def get_all_employee_names():
     return fetch_all('SELECT cpf_funcionario, nome, sobrenome FROM Funcionario ORDER BY nome, sobrenome;')
 
 
-def get_all_exemplars():
+def get_all_exemplar_names():
     return fetch_all(
         'SELECT id_exemplar, nome FROM Exemplar_Aluguel, Jogo ' +
+        'WHERE Jogo.id_jogo = Exemplar_Aluguel.id_jogo;'
+    )
+
+
+def get_all_exemplar_prices():
+    return fetch_all(
+        'SELECT id_exemplar, nome, preco_aluguel FROM Exemplar_Aluguel, Jogo ' +
         'WHERE Jogo.id_jogo = Exemplar_Aluguel.id_jogo;'
     )
 

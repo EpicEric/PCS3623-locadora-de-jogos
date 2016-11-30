@@ -1,8 +1,9 @@
 from board_game_store.db.access import (
     add_exemplar, add_game, add_rental, add_purchase, get_all_game_names,
-    get_all_exemplars, get_exemplar_info, get_exemplars_by_game,
-    get_last_exemplar_id, get_game_info, get_rental_info, get_purchase_info,
-    get_rental_value, get_purchase_value, get_all_rentals, get_all_purchases
+    get_all_game_prices, get_all_exemplar_names, get_all_exemplar_prices,
+    get_exemplar_info, get_exemplars_by_game, get_last_exemplar_id,
+    get_game_info, get_rental_info, get_purchase_info, get_rental_value,
+    get_purchase_value, get_all_rentals, get_all_purchases
 )
 from datetime import datetime
 from board_game_store.models.game import Game
@@ -20,6 +21,8 @@ class AddRentalForm(FlaskForm):
     exemplars = FieldList(SelectField('Exemplar', coerce=int, validators=[DataRequired()]), min_entries=1)
     add_exemplar = SubmitField('Adicionar exemplar')
     remove_exemplar = SubmitField('Remover exemplar')
+    confirm = SubmitField('Confirmar')
+    insert = SubmitField('Cadastrar')
 
 
 class ItemCompraForm(FlaskForm):
@@ -31,6 +34,8 @@ class AddPurchaseForm(FlaskForm):
     games = FieldList(FormField(ItemCompraForm), min_entries=1)
     add_game = SubmitField('Adicionar jogo')
     remove_game = SubmitField('Remover jogo')
+    confirm = SubmitField('Confirmar')
+    insert = SubmitField('Cadastrar')
 
 
 class AddGameForm(FlaskForm):
@@ -74,7 +79,9 @@ def default_games_page():
 @login_required
 def add_rental_page():
     form = AddRentalForm()
-    list_exemplars = [(e[0], "{} - {}".format(e[0], e[1])) for e in get_all_exemplars()]
+    confirmation = False
+    value = "Desconhecido"
+    list_exemplars = [(e[0], "{} - {} - {}".format(e[0], e[1], e[2])) for e in get_all_exemplar_prices()]
     for select in form.exemplars.entries:
         select.choices = list_exemplars
     if form.add_exemplar.data:
@@ -83,23 +90,27 @@ def add_rental_page():
     elif form.remove_exemplar.data and len(form.exemplars.entries) > form.exemplars.min_entries:
         form.exemplars.pop_entry()
     elif form.validate_on_submit():
+        confirmation = True
         try:
             rented_exemplars = list(set([x.data for x in form.exemplars.entries]))
             value = get_rental_value(rented_exemplars)
-            add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars, value)
+            if form.insert.data:
+                add_rental(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), rented_exemplars, value)
+                return redirect('success')
         except Exception as e:
             import traceback
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-        return redirect('success')
 
-    return render_template('games/add_rental.html', form=form)
+    return render_template('games/add_rental.html', form=form, confirmation=confirmation, value=value)
 
 
 @games_blueprint.route('/games/add-purchase', methods=['GET', 'POST'])
 @login_required
 def add_purchase_page():
     form = AddPurchaseForm()
-    list_games = get_all_game_names()
+    confirmation = False
+    value = "Desconhecido"
+    list_games = [(e[0], "{} - {}".format(e[1], e[2])) for e in get_all_game_prices()]
     for select in form.games.entries:
         select.game.choices = list_games
     if form.add_game.data:
@@ -108,6 +119,7 @@ def add_purchase_page():
     elif form.remove_game.data and len(form.games.entries) > form.games.min_entries:
         form.games.pop_entry()
     elif form.validate_on_submit():
+        confirmation = True
         try:
             dict = {}
             for x in form.games.entries:
@@ -117,13 +129,14 @@ def add_purchase_page():
                     dict[x.game.data] = x.quantity.data
             purchased_games = dict.items()
             value = get_purchase_value(purchased_games)
-            add_purchase(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), purchased_games, value)
+            if form.insert.data:
+                add_purchase(form.client_cpf.data, current_user.get_id(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"), purchased_games, value)
+                return redirect('success')
         except Exception as e:
             import traceback
             return error('Erro no banco de dados: {}'.format(traceback.format_exc()))
-        return redirect('success')
 
-    return render_template('games/add_purchase.html', form=form)
+    return render_template('games/add_purchase.html', form=form, confirmation=confirmation, value=value)
 
 @games_blueprint.route('/games/add-game', methods=['GET', 'POST'])
 @login_required
@@ -179,7 +192,7 @@ def view_game_page():
 @games_blueprint.route('/games/list-exemplars')
 @login_required
 def list_exemplars_page():
-    exemplar_list = [(x[0], '{} - {}'.format(x[0], x[1])) for x in get_all_exemplars()]
+    exemplar_list = [(x[0], '{} - {}'.format(x[0], x[1])) for x in get_all_exemplar_names()]
     form = AddExemplarForm()
     return render_template('games/list_exemplars.html', exemplar_list=exemplar_list, form=form)
 

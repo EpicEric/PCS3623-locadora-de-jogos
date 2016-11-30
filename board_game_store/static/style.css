@@ -48,6 +48,63 @@
     background: rgb(66, 184, 221); /* this is a light blue */
 }
 
+/* Pop-up - modified from @imprakash */
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 0.2s;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #0078e7;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+.overlay:target:before { /* Pop-up appears on page load */
+    display: none;
+}
+.overlay:before {
+  content:"";
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  z-index: 9;
+}
+.overlay .popup {
+  background: #fff;
+  border-radius: 5px;
+  min-width: 310px;
+  width: 30%;
+  position: fixed;
+  top: 0;
+  left: 35%;
+  padding: 25px;
+  margin: 70px auto;
+  z-index: 10;
+  -webkit-transition: all 0.6s ease-in-out;
+  -moz-transition: all 0.6s ease-in-out;
+  transition: all 0.6s ease-in-out;
+}
+.overlay:target .popup {
+    top: -100%;
+}
+
 /* Menu */
 
 .custom-menu-wrapper {
