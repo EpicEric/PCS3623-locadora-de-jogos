@@ -17,10 +17,10 @@
                 {% for item in reserve_list %}
                     <tr{{ loop.cycle(' class=pure-table-odd', '') }}>
                         <td align="center" valign="middle">
-                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[0] }}</a>
+                            <a href="/rooms/view-reserve?number={{ item[0] }}&time={{ item[1] }}">{{ item[0] }}</a>
                         </td>
                         <td align="center" valign="middle">
-                            <a href="/rooms/view-room?number={{ item[0] }}">{{ item[1] }}</a>
+                            <a href="/rooms/view-reserve?number={{ item[0] }}&time={{ item[1] }}">{{ item[1] }}</a>
                         </td>
                     </tr>
                 {% endfor %}

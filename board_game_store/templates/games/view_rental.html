@@ -9,10 +9,10 @@
                 {{ form.id.label }} {{ form.id(readonly=True,class_="pure-u-23-24") }}
             </div>
             <div class="pure-u-1 pure-u-md-1-3">
-                {{ form.client_cpf.label }} {{ form.client_cpf(readonly=True,class_="pure-u-23-24") }}
+                {{ form.client_cpf.label }} <a href="/clients/view-client?cpf={{ form.client_cpf.data }}">{{ form.client_cpf(readonly=True,class_="pure-u-23-24") }}</a>
             </div>
             <div class="pure-u-1 pure-u-md-1-3">
-                {{ form.employee_cpf.label }} {{ form.employee_cpf(readonly=True,class_="pure-u-23-24") }}
+                {{ form.employee_cpf.label }} <a href="/employees/view-employee?cpf={{ form.employee_cpf.data }}">{{ form.employee_cpf(readonly=True,class_="pure-u-23-24") }}</a>
             </div>
             <div class="pure-u-1 pure-u-md-1-3">
                 {{ form.time.label }} {{ form.time(readonly=True,class_="pure-u-23-24") }}
@@ -21,6 +21,20 @@
                 {{ form.value.label }} {{ form.value(readonly=True,class_="pure-u-23-24") }}
             </div>
         </div>
+    </fieldset>
+</form>
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Itens do aluguel</legend>
+        <center>
+            <div class="pure-g">
+                {% for item in exemplars %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/games/view-exemplar?id={{ item[0] }}">{{ item[0] }} - {{ item[1] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
     </fieldset>
 </form>
 {% endblock %}

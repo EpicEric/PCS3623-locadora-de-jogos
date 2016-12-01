@@ -86,10 +86,12 @@ def add_rental(client_cpf, employee_cpf, time, exemplars, value):
 
     connection = Connection()
     with connection.cursor() as cursor:
+        # Insert rental
         cursor.execute(
             'INSERT INTO Aluguel VALUES (%s, %s, %s, %s, %s);',
             (rental_id, client_cpf, employee_cpf, time, value)
         )
+        # Insert individual rental items
         cursor.executemany(
             'INSERT INTO Item_Aluguel VALUES (%s, %s);',
             (exemplars_data)
@@ -113,14 +115,17 @@ def add_purchase(client_cpf, employee_cpf, time, games, value):
 
     connection = Connection()
     with connection.cursor() as cursor:
+        # Insert purchase
         cursor.execute(
             'INSERT INTO Compra VALUES (%s, %s, %s, %s, %s);',
             (purchase_id, client_cpf, employee_cpf, time, value)
         )
+        # Update game stocks - removes purchased items
         cursor.executemany(
             'UPDATE Jogo SET estoque_compra = estoque_compra-%s WHERE id_jogo = %s;',
             (stock_data)
         )
+        # Insert individual purchase items
         cursor.executemany(
             'INSERT INTO Item_Compra VALUES (%s, %s, %s);',
             (games_data)
@@ -204,6 +209,13 @@ def get_room_info(number):
     return fetch_one('SELECT numero, lugares FROM Sala WHERE numero = %s;', (number,))
 
 
+def get_reservation_info(number, time):
+    return fetch_one(
+        'SELECT num_sala, horario_inicio, horario_fim, cpf_cliente, cpf_funcionario '
+        + ' FROM Reserva_Sala WHERE num_sala = %s AND horario_inicio = %s;', (number, time)
+    )
+
+
 def get_client_info(cpf):
     return fetch_one('SELECT cpf_cliente, nome, sobrenome, aniversario FROM Cliente WHERE cpf_cliente = %s;', (cpf,))
 
@@ -251,6 +263,13 @@ def get_free_rooms(seats, time):
     return data
 
 
+def get_room_reservations(room_number):
+    return fetch_all(
+        'SELECT horario_inicio, horario_fim FROM Reserva_Sala '
+        + 'WHERE num_sala = %s ORDER BY horario_inicio DESC;', (room_number,)
+    )
+
+
 def get_all_employee_names():
     return fetch_all('SELECT cpf_funcionario, nome, sobrenome FROM Funcionario ORDER BY nome, sobrenome;')
 
@@ -273,6 +292,20 @@ def get_exemplars_by_game(game_id):
     return fetch_all(
         'SELECT id_exemplar FROM Exemplar_Aluguel ' +
         'WHERE id_jogo = %s;', (game_id,)
+    )
+
+
+def get_exemplars_by_rental(rental_id):
+    return fetch_all(
+        'SELECT i.id_exemplar, j.nome FROM Item_Aluguel i, Exemplar_Aluguel e, Jogo j ' +
+        'WHERE i.id_aluguel = %s AND i.id_exemplar = e.id_exemplar AND e.id_jogo = j.id_jogo;', (rental_id,)
+    )
+
+
+def get_games_by_purchase(purchase_id):
+    return fetch_all(
+        'SELECT i.id_jogo, j.nome, i.quantidade FROM Item_Compra i, Jogo j ' +
+        'WHERE i.id_compra = %s AND i.id_jogo = j.id_jogo;', (purchase_id,)
     )
 
 

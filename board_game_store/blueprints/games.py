@@ -3,7 +3,8 @@ from board_game_store.db.access import (
     get_all_game_prices, get_all_exemplar_names, get_all_exemplar_prices,
     get_exemplar_info, get_exemplars_by_game, get_last_exemplar_id,
     get_game_info, get_rental_info, get_purchase_info, get_rental_value,
-    get_purchase_value, get_all_rentals, get_all_purchases
+    get_purchase_value, get_all_rentals, get_all_purchases, get_exemplars_by_rental,
+    get_games_by_purchase
 )
 from datetime import datetime
 from board_game_store.models.game import Game
@@ -210,7 +211,7 @@ def view_exemplar_page():
     form.game.data = game_name
 
     other_exemplars = [(x[0], x[0]) for x in get_exemplars_by_game(game_id) if str(x[0]) != str(exemplar_id)]
-    return render_template('games/view_exemplar.html', form=form, other_exemplars=other_exemplars)
+    return render_template('games/view_exemplar.html', form=form, other_exemplars=other_exemplars, game_id=game_id)
 
 
 @games_blueprint.route('/games/list-rentals')
@@ -238,7 +239,8 @@ def view_rental_page():
     form.employee_cpf.data = rental_tuple[2]
     form.time.data = rental_tuple[3]
     form.value.data = rental_tuple[4]
-    return render_template('games/view_rental.html', form=form)
+    exemplars = get_exemplars_by_rental(rental_id)
+    return render_template('games/view_rental.html', form=form, exemplars=exemplars)
 
 
 @games_blueprint.route('/games/view-purchase')
@@ -252,4 +254,5 @@ def view_purchase_page():
     form.employee_cpf.data = purchase_tuple[2]
     form.time.data = purchase_tuple[3]
     form.value.data = purchase_tuple[4]
-    return render_template('games/view_purchase.html', form=form)
+    games = get_games_by_purchase(purchase_id)
+    return render_template('games/view_purchase.html', form=form, games=games)

@@ -9,7 +9,7 @@
                 {{ form.exemplar_id.label }} {{ form.exemplar_id(readonly=True,class_="pure-u-23-24") }}
             </div>
             <div class="pure-u-1 pure-u-md-1-3">
-                {{ form.game.label }} {{ form.game(readonly=True,class_="pure-u-23-24") }}
+                {{ form.game.label }} <a href="/games/view-game?id={{ game_id }}">{{ form.game(readonly=True,class_="pure-u-23-24") }}</a>
             </div>
         </div>
     </fieldset>

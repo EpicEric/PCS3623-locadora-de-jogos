@@ -21,7 +21,7 @@
                 {{ form.salary.label }} {{ form.salary(readonly=True,class_="pure-u-23-24") }}
             </div>
             <div class="pure-u-1 pure-u-md-1-3">
-                {{ form.supervisor.label }} {{ form.supervisor(readonly=True,class_="pure-u-23-24") }}
+                {{ form.supervisor.label }} <a href="/employees/view-employee?cpf={{ form.supervisor.data }}">{{ form.supervisor(readonly=True,class_="pure-u-23-24") }}</a>
             </div>
         </div>
     </fieldset>

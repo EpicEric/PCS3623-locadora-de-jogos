@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_reservation, add_room, get_all_rooms, get_free_rooms, get_room_info, get_all_reserves
+from board_game_store.db.access import add_reservation, add_room, get_all_rooms, get_free_rooms, get_room_info, get_all_reserves, get_reservation_info, get_room_reservations
 from datetime import datetime
 from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -22,6 +22,14 @@ class ViewRoomForm(FlaskForm):
     room = SelectField('Salas disponíveis')
     end_time = StringField('Horário de fim')
     client_cpf = StringField('CPF do cliente')
+
+
+class ViewReservationForm(FlaskForm):
+    room_number = IntegerField('Número da sala', validators=[DataRequired()])
+    start_time = StringField('Horário de início', validators=[DataRequired()])
+    end_time = StringField('Horário de término', validators=[DataRequired()])
+    client_cpf = StringField('CPF do cliente', validators=[DataRequired()])
+    employee_cpf = StringField('CPF do funcionário', validators=[DataRequired()])
 
 
 @rooms_blueprint.route('/rooms')
@@ -58,7 +66,9 @@ def view_room_page():
     form.number.data = room_tuple[0]
     form.seats.data = room_tuple[1]
 
-    return render_template('rooms/view_room.html', form=form)
+    reservations = get_room_reservations(room_number)
+
+    return render_template('rooms/view_room.html', form=form, reservations=reservations)
 
 
 @rooms_blueprint.route('/rooms/reserve-room', methods=['GET', 'POST'])
@@ -87,3 +97,21 @@ def reserve_room_page():
 def list_reserves_page():
     reserve_list = get_all_reserves()
     return render_template('rooms/list_reserves.html', reserve_list=reserve_list)
+
+
+@rooms_blueprint.route('/rooms/view-reserve')
+@login_required
+def view_reserve_page():
+    room_number = request.args.get('number', '')
+    start_time = request.args.get('time', '')
+    reservation_tuple = get_reservation_info(room_number, start_time)
+
+    form = ViewReservationForm()
+
+    form.room_number.data = reservation_tuple[0]
+    form.start_time.data = reservation_tuple[1]
+    form.end_time.data = reservation_tuple[2]
+    form.client_cpf.data = reservation_tuple[3]
+    form.employee_cpf.data = reservation_tuple[4]
+
+    return render_template('rooms/view_reserve.html', form=form)

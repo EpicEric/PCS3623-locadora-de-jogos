@@ -1,9 +1,9 @@
 {% extends "base_form.html" %}
-{% block title %}Consulta de Sala{% endblock %}
+{% block title %}{% if form.room.choices %}Cadastro de Reserva{% else %}Consulta de Sala{% endif %}{% endblock %}
 {% block body %}
 <form class="pure-form pure-form-aligned" method="POST" action="/rooms/reserve-room">
     <fieldset>
-        <legend>Consultar sala</legend>
+        <legend>{% if form.room.choices %}Cadastrar nova reserva{% else %}Consultar sala{% endif %}</legend>
         {{ form.csrf_token }}
         <div class="pure-control-group">
             {{ form.seats.label }} {{ form.seats(required=True) }}
@@ -26,7 +26,7 @@
         </div>
         {% endif %}
         <div class="pure-controls">
-            <input type="submit" class="pure-button pure-button-primary" value="Consultar">
+            <input type="submit" class="pure-button pure-button-primary" value="{% if form.room.choices %}Cadastrar{% else %}Consultar{% endif %}">
         </div>
     </fieldset>
 </form>
