@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_client, get_all_client_names, get_client_info
+from board_game_store.db.access import add_client, get_all_client_names, get_client_info, get_rentals_by_client, get_purchases_by_client, get_reservations_by_client
 from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
@@ -55,4 +55,8 @@ def view_client_page():
     form.surname.data = client_tuple[2]
     form.birthday.data = client_tuple[3]
 
-    return render_template('clients/view_client.html', form=form)
+    rentals = get_rentals_by_client(client_cpf)
+    purchases = get_purchases_by_client(client_cpf)
+    reservations = get_reservations_by_client(client_cpf)
+
+    return render_template('clients/view_client.html', form=form, rentals=rentals, purchases=purchases, reservations=reservations)

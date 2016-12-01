@@ -373,3 +373,45 @@ def get_last_rental_id():
 
 def get_last_purchase_id():
     return fetch_one('SELECT MAX(id_compra) FROM Compra;')[0]
+
+
+def get_rentals_by_client(cpf):
+    return fetch_all(
+        'SELECT id_aluguel, horario, valor FROM Aluguel '
+        + 'WHERE cpf_cliente = %s ORDER BY horario DESC;', (cpf,)
+    )
+
+
+def get_purchases_by_client(cpf):
+    return fetch_all(
+        'SELECT id_compra, horario, valor FROM Compra '
+        + 'WHERE cpf_cliente = %s ORDER BY horario DESC;', (cpf,)
+    )
+
+
+def get_reservations_by_client(cpf):
+    return fetch_all(
+        'SELECT num_sala, horario_inicio, horario_fim FROM Reserva_Sala '
+        + 'WHERE cpf_cliente = %s ORDER BY horario_inicio DESC;', (cpf,)
+    )
+
+
+def get_rentals_by_employee(cpf):
+    return fetch_all(
+        'SELECT id_aluguel, horario, valor FROM Aluguel '
+        + 'WHERE cpf_funcionario = %s ORDER BY horario DESC;', (cpf,)
+    )
+
+
+def get_purchases_by_employee(cpf):
+    return fetch_all(
+        'SELECT id_compra, horario, valor FROM Compra '
+        + 'WHERE cpf_funcionario = %s ORDER BY horario DESC;', (cpf,)
+    )
+
+
+def get_reservations_by_employee(cpf):
+    return fetch_all(
+        'SELECT num_sala, horario_inicio, horario_fim FROM Reserva_Sala '
+        + 'WHERE cpf_funcionario = %s ORDER BY horario_inicio DESC;', (cpf,)
+    )

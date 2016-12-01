@@ -1,4 +1,4 @@
-from board_game_store.db.access import add_employee, get_all_employee_names, get_employee_info
+from board_game_store.db.access import add_employee, get_all_employee_names, get_employee_info, get_rentals_by_employee, get_purchases_by_employee, get_reservations_by_employee
 from board_game_store.models.employee import Employee
 from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
@@ -59,4 +59,8 @@ def view_client_page():
     form.salary.data = employee_tuple[4]
     form.supervisor.data = employee_tuple[5]
 
-    return render_template('employees/view_employee.html', form=form)
+    rentals = get_rentals_by_employee(employee_cpf)
+    purchases = get_purchases_by_employee(employee_cpf)
+    reservations = get_reservations_by_employee(employee_cpf)
+
+    return render_template('employees/view_employee.html', form=form, rentals=rentals, purchases=purchases, reservations=reservations)

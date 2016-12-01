@@ -26,4 +26,56 @@
         </div>
     </fieldset>
 </form>
+
+{% if rentals %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Alugueis cadastrados</legend>
+        <center>
+            <div class="pure-g">
+                {% for item in rentals %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/games/view-rental?id={{ item[0] }}">{{ item[1] }} ({{ item[2] }})</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
+    </fieldset>
+</form>
+{% endif %}
+
+{% if purchases %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Compras cadastradas</legend>
+        <center>
+            <div class="pure-g">
+                {% for item in purchases %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/games/view-purchase?id={{ item[0] }}">{{ item[1] }} ({{ item[2] }})</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
+    </fieldset>
+</form>
+{% endif %}
+
+{% if reservations %}
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Reservas cadastradas</legend>
+        <center>
+            <div class="pure-g">
+                {% for item in reservations %}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <a href="/rooms/view-reserve?number={{ item[0] }}&time={{ item[1] }}">{{ item[1] }}<br>{{ item[2] }}<br>({{ item[0] }})</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </center>
+    </fieldset>
+</form>
+{% endif %}
+
 {% endblock %}
