@@ -134,22 +134,6 @@ def add_purchase(client_cpf, employee_cpf, time, games, value):
     connection.close()
 
 
-def validate_login(cpf, password):
-    try:
-        connection = Connection()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                'SELECT senha FROM Funcionario WHERE cpf_funcionario = \'%s\';' % (cpf)
-            )
-            data = cursor.fetchone()
-            connection.close()
-            if data is not None:
-                return check_password_hash(data[0], password)
-    except Exception as e:
-        return False
-    return False
-
-
 def fetch_all(*args):
     connection = Connection()
     with connection.cursor() as cursor:
