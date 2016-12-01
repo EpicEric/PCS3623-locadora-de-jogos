@@ -12,6 +12,9 @@
             {{ form.password.label }} {{ form.password(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
+            {{ form.confirm_password.label }} {{ form.confirm_password(size=20, required=True) }}
+        </div>
+        <div class="pure-control-group">
             {{ form.name.label }} {{ form.name(size=20, required=True) }}
         </div>
         <div class="pure-control-group">
@@ -31,4 +34,21 @@
         </div>
     </fieldset>
 </form>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div id="popup" class="overlay">
+            <div class="popup">
+                <h2>Erro de formulário</h2>
+                <a class="close" href="#popup">&times;</a>
+                <div class="content">
+                    {% for message in messages %}
+                    {{ message }}<br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+
 {% endblock %}

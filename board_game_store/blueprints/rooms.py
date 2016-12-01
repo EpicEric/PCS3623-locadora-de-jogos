@@ -6,6 +6,7 @@ from wtforms import IntegerField, SelectField, StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, NumberRange
 from flask_login import current_user, login_required
+from .errors import flash_errors
 
 rooms_blueprint = Blueprint('rooms', __name__, template_folder='templates')
 
@@ -45,6 +46,8 @@ def add_rooms_page():
     if form.validate_on_submit():
         add_room(form.number.data, form.seats.data)
         return redirect('success')
+    else:
+        flash_errors(form)
     return render_template('rooms/add_room.html', form=form)
 
 

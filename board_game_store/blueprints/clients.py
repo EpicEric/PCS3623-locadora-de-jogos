@@ -1,10 +1,11 @@
 from board_game_store.db.access import add_client, get_all_client_names, get_client_info, get_rentals_by_client, get_purchases_by_client, get_reservations_by_client
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
 from flask_login import login_required
+from .errors import flash_errors
 
 clients_blueprint = Blueprint('clients', __name__, template_folder='templates')
 
@@ -32,6 +33,8 @@ def add_client_page():
             raise RuntimeError('CPF deve possuir 11 dígitos numéricos')
         add_client(form.cpf.data, form.name.data, form.surname.data, form.birthday.data)
         return redirect('success')
+    else:
+        flash_errors(form)
     return render_template('clients/add_client.html', form=form)
 
 
