@@ -176,6 +176,7 @@ def get_rental_value(rentals):
         value += Decimal(re.search("(\d+(\.\d\d)?)", price).group(0))
     return str(value)
 
+
 def get_purchase_value(purchases):
         value = Decimal('0.0')
         for p in purchases:
@@ -184,6 +185,7 @@ def get_purchase_value(purchases):
             )[0]
             value += p[1] * Decimal(re.search("(\d+(\.\d\d)?)", price).group(0))
         return str(value)
+
 
 def get_all_client_names():
     return fetch_all('SELECT cpf_cliente, nome, sobrenome FROM Cliente ORDER BY nome, sobrenome;')
@@ -242,7 +244,7 @@ def get_free_rooms(seats, time):
             (ids, time)
         )
         max_time = dict(cursor.fetchall())
-        data = [(room_id, max_time.get(room_id, 'Sem reserva futura')) for room_id in ids]
+        data = [(room_id, max_time.get(room_id)) for room_id in ids]
     connection.close()
     return data
 

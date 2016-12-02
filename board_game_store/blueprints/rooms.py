@@ -85,7 +85,7 @@ def reserve_room_page():
             return redirect('success')
         else:
             form.room.choices = [
-                (x[0], '{} - Livre até {}'.format(x[0], x[1]))
+                (x[0], '{} - {}'.format(x[0], x[1] and 'Livre até {}'.format(x[1]) or 'Sem reserva futura'))
                 for x in get_free_rooms(form.seats.data, desired_time)
             ]
             return render_template('rooms/reserve_room.html', form=form)
