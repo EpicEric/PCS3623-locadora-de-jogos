@@ -5,8 +5,9 @@ from .blueprints.games import games_blueprint
 from .blueprints.rooms import rooms_blueprint
 from .db.access import NoDBElementError
 from .models.user import User
+import os
 import board_game_store.config as config
-from flask import flash, Flask, render_template, redirect
+from flask import flash, Flask, render_template, redirect, send_from_directory
 from flask_login import LoginManager, login_required
 
 app = Flask(__name__)
@@ -19,6 +20,12 @@ app.register_blueprint(clients_blueprint)
 app.register_blueprint(employees_blueprint)
 app.register_blueprint(games_blueprint)
 app.register_blueprint(rooms_blueprint)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @login_manager.user_loader
