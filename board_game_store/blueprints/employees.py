@@ -3,15 +3,17 @@ from board_game_store.models.employee import Employee
 from flask import Blueprint, redirect, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, EqualTo
 from flask_login import login_required
+from .errors import flash_errors
 
 employees_blueprint = Blueprint('employee', __name__, template_folder='templates')
 
 
 class AddEmployeeForm(FlaskForm):
     cpf = StringField('CPF', validators=[DataRequired()])
-    password = PasswordField('Senha', validators=[DataRequired()])
+    password = PasswordField('Senha', validators=[DataRequired(), EqualTo('confirm_password', message='Senhas não são iguais')])
+    confirm_password = PasswordField('Repetir senha', validators=[DataRequired()])
     name = StringField('Nome', validators=[DataRequired()])
     surname = StringField('Sobrenome', validators=[DataRequired()])
     role = StringField('Função', validators=[DataRequired()])
@@ -27,12 +29,14 @@ def default_employees_page():
 
 @employees_blueprint.route('/employees/add-employee', methods=['GET', 'POST'])
 @login_required
-def add_games_page():
+def add_employee_page():
     form = AddEmployeeForm()
     if form.validate_on_submit():
         add_employee(Employee(form.cpf.data, form.password.data, form.name.data, form.surname.data,
                               form.role.data, form.salary.data, form.supervisor.data))
         return redirect('success')
+    else:
+        flash_errors(form)
     return render_template('employees/add_employee.html', form=form)
 
 
@@ -46,7 +50,7 @@ def list_employees_page():
 
 @employees_blueprint.route('/employees/view-employee')
 @login_required
-def view_client_page():
+def view_employee_page():
     employee_cpf = request.args.get('cpf', '')
     employee_tuple = get_employee_info(employee_cpf)
 
